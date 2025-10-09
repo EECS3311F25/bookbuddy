@@ -1,5 +1,15 @@
-# OS
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
 # Frontend (React + Vite)
 frontend/node_modules/
@@ -19,6 +29,14 @@ backend/.env
 backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
+
+# Gradle
+.gradle/
+**/build/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 
 # Eclipse
 backend/.classpath
