@@ -21,6 +21,10 @@ Spring Boot REST API for BookBuddy.
 
 ### Using Eclipse
 
+See the [Eclipse setup guide in DEVELOPMENT_GUIDE.md](../DEVELOPMENT_GUIDE.md#ide-setup-eclipse---backend-only) for complete setup and Git workflow instructions.
+
+**Quick start:**
+
 1. **Import Project**:
 
    - `File` → `Import` → `Existing Maven Projects`
