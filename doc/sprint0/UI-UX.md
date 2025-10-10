@@ -20,7 +20,7 @@
   - Home: Shows monthly reading progress, quick stats, and shortcuts.  
   - Library: Displays all books organized into Currently Reading, Read, and Want to Read tabs.  
   - Monthly Tracker: Displays current month’s goals and the list of books to be finished.  
-  - Settings: Includes About BookBuddy, and Profile section.  
+  - Settings: Includes About BookBuddy,and Profile section.  
   - Profile: Displays and allows editing of user information such as name, address, and phone number.  
 - The navigation stays consistent across all screens to make the app simple and user-friendly.  
 
