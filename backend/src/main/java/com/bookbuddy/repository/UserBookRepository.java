@@ -1,7 +1,9 @@
 package com.bookbuddy.repository;
 
-import com.bookbuddy.model.Book;
+
 import com.bookbuddy.model.User;
+import com.bookbuddy.model.UserBook;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,13 +13,13 @@ import java.util.List;
  * Repository for Book entity
  */
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
-    List<Book> findByUser(User user);
+    List<UserBook> findByUser(User user);
 
-    List<Book> findByUserAndShelf(User user, String shelf);
+    List<UserBook> findByUserAndShelf(User user, String shelf);
 
-    List<Book> findByUserOrderByCreatedAtDesc(User user);
+    List<UserBook> findByUserOrderByCreatedAtDesc(User user);
 
     long countByUserAndShelf(User user, String shelf);
 }

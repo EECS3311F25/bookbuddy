@@ -1,47 +1,156 @@
 package com.bookbuddy.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.Pattern;
 
 /**
- * User entity representing app users
- * Each user has their own personal library and reading goals
+ * User entity representing APP users.
+ * Each user has their own personal library and reading goals.
+ * The class handles:
+ * 1. Personal library list (userBooks)
+ * 2. Profile updates
+ * 3. Simple user data management
  */
+
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @NotBlank(message = "Username is required")
-    @Column(unique = true, nullable = false)
-    private String username;
+	@NotBlank(message = "First name cannot be empty")
+	@Column(nullable = false)
+	private String firstName;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email must be valid")
-    @Column(unique = true, nullable = false)
-    private String email;
+	@NotBlank(message = "Last name cannot be empty")
+	@Column(nullable = false)
+	private String lastName;
 
-    @NotBlank(message = "Password is required")
-    @Column(nullable = false)
-    private String password;
+	@NotBlank(message = "Username cannot be empty")
+	@Column(nullable = false, unique = true)
+	private String username;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+	@Email(message = "Email should be valid")
+	@NotBlank(message = "Email cannot be empty")
+	@Column(nullable = false, unique = true)
+	private String email;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+	@Pattern(
+			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+			message = "Password must include at least 8 characters, uppercase, lowercase, and numbers"
+			)
+	@Column(nullable = false)
+	private String password;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private ArrayList<UserBook> userBooks = new ArrayList<>();
+
+
+	public User() {}
+
+	public User(String firstName, String lastName, String username, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
+
+	public long getId() { return id; }
+
+	public String getFirstName() { return firstName; }
+
+	public String getLastName() { return lastName; }
+
+	public String getUsername() { return username; }
+
+	public String getEmail() { return email; }
+
+	public String getPassword() { return password; }
+
+	public ArrayList<UserBook> getUserBooks() { return userBooks; }
+
+	public void setUserBooks(ArrayList<UserBook> userBooks) {
+		this.userBooks = userBooks;
+	}
+
+	public void addUserBook(UserBook userBook) {
+		if (userBook != null && !this.userBooks.contains(userBook)) {
+			userBooks.add(userBook);
+			userBook.setUser(this);
+		}
+	}
+
+	public void removeBook(UserBook userBook) {
+		if (userBook != null && this.userBooks.remove(userBook)) {
+			userBook.setUser(null);
+		}
+	}
+
+	public void updateFirstName(String newFirstName) {
+		if (newFirstName != null && !newFirstName.isBlank()) {
+			this.firstName = newFirstName;
+		}
+	}
+
+	public void updateLastName(String newLastName) {
+		if (newLastName != null && !newLastName.isBlank()) {
+			this.lastName = newLastName;
+		}
+	}
+
+	public void updateUsername(String newUsername) {
+		if (newUsername != null && !newUsername.isBlank()) {
+			this.username = newUsername;
+		}
+	}
+
+	public void updateEmail(String newEmail) {
+		if (newEmail != null && !newEmail.isBlank()) {
+			this.email = newEmail;
+		}
+	}
+
+	public void updatePassword(String newPassword) {
+		if (newPassword != null && !newPassword.isBlank()) {
+			this.password = newPassword; // should be hashed in service layer
+		}
+	}
+
+	public int getTotalBooks() {
+		return this.userBooks.size();
+	}
+
+	public String getBooks() {
+		if (this.userBooks.isEmpty()) {
+			return "N/A";
+		}
+
+		StringBuilder books = new StringBuilder();
+		for (int i = 0; i < this.userBooks.size(); i++) {
+			UserBook ub = userBooks.get(i);
+			books.append(String.format("%s by %s", ub.getBook().getTitle(), ub.getBook().getAuthor()));
+			if (i < this.userBooks.size() - 1) {
+				books.append(", ");
+			} else {
+				books.append(".");
+			}
+		}
+		return books.toString();
+	}
+
+
+	@Override
+	public String toString() {
+		return String.format(
+				"User { id=%d, firstName='%s', lastName='%s', username='%s', email='%s', totalBooks=%d, books=[%s], password='******' }",
+				id, firstName, lastName, username, email, getTotalBooks(), getBooks()
+				);
+	}
 }
