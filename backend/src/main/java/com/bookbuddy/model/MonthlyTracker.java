@@ -1,140 +1,191 @@
 package com.bookbuddy.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
- * Tracks a user's monthly reading goals.
- * Each user can have multiple MonthlyTrackers (e.g., one for each month).
- * Each tracker can contain multiple MonthlyTrackerBooks.
- * 
- * When a book is marked as READ, it is removed from the monthly tracker automatically.
+ * Represents a user's monthly reading goal.
+ * Each user can have multiple MonthlyTrackers (one for each month)
+ * that keep track of their progress and reading targets.
  */
-
 @Entity
 @Table(name = "monthly_trackers")
 public class MonthlyTracker {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	// Each tracker belongs to one user
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+    // Each tracker belongs to one user
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	// The month being tracked
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Months month;
+    // The month being tracked
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Months month;
 
-	@Pattern(regexp = "^\\d{4}$", message = "Year must be a 4-digit number")
-	@Column(nullable = false)
-	private String year;
+    // The year (must be a 4-digit number)
+    @Pattern(regexp = "^\\d{4}$", message = "Year must be a 4-digit number")
+    @Column(nullable = false)
+    private String year;
 
-	// User's target number of books for this month
-	@Column(nullable = false)
-	private int targetBooksNum;
+    // User's target number of books for this month
+    @Column(nullable = false)
+    private int targetBooksNum;
 
-	// The list of books in this monthly tracker
-	@OneToMany(mappedBy = "monthlyTracker", cascade = CascadeType.ALL, orphanRemoval = true)
-	private ArrayList<MonthlyTrackerBook> goalBooks = new ArrayList<>();
+    // The list of books being tracked for this month
+    @OneToMany(mappedBy = "monthlyTracker", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ArrayList<MonthlyTrackerBook> goalBooks = new ArrayList<>();
 
-	public MonthlyTracker() {}
+    /** Default constructor (required by JPA). */
+    public MonthlyTracker() {}
 
-	public MonthlyTracker(User user, Months month) {
-		this.user = user;
-		this.month = month;
-		this.year = String.valueOf(LocalDate.now().getYear());
-		this.targetBooksNum = 0;
-	}
+    /**
+     * Creates a tracker for a user for a specific month.
+     * @param user the user who owns this tracker
+     * @param month the month being tracked
+     */
+    public MonthlyTracker(User user, Months month) {
+        this.user = user;
+        this.month = month;
+        this.year = String.valueOf(LocalDate.now().getYear());
+        this.targetBooksNum = 0;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    /** @return the ID of this tracker */
+    public Long getId() {
+        return id;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    /** @return the user who owns this tracker */
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    /** @param user sets the user who owns this tracker */
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public Months getMonth() {
-		return month;
-	}
+    /** @return the month associated with this tracker */
+    public Months getMonth() {
+        return month;
+    }
 
-	public void setMonth(Months month) {
-		this.month = month;
-	}
+    /** @param month sets the month for this tracker */
+    public void setMonth(Months month) {
+        this.month = month;
+    }
 
+    /** @return the year being tracked */
+    public String getYear() {
+        return year;
+    }
 
-	public int getTargetBooksNum() {
-		return targetBooksNum;
-	}
+    /** @param year sets the year being tracked */
+    public void setYear(String year) {
+        this.year = year;
+    }
 
-	public void setTargetBooksNum(int targetBooksNum) {
-		this.targetBooksNum = targetBooksNum;
-	}
+    /** @return the target number of books */
+    public int getTargetBooksNum() {
+        return targetBooksNum;
+    }
 
-	public ArrayList<MonthlyTrackerBook> getGoalBooks() {
-		return goalBooks;
-	}
+    /** @param targetBooksNum sets the target number of books */
+    public void setTargetBooksNum(int targetBooksNum) {
+        this.targetBooksNum = targetBooksNum;
+    }
 
-	public void setGoalBooks(ArrayList<MonthlyTrackerBook> goalBooks) {
-		this.goalBooks = goalBooks;
-	}
+    /** @return list of all goal books in this tracker */
+    public ArrayList<MonthlyTrackerBook> getGoalBooks() {
+        return goalBooks;
+    }
 
+    /** @param goalBooks sets the list of goal books */
+    public void setGoalBooks(ArrayList<MonthlyTrackerBook> goalBooks) {
+        this.goalBooks = goalBooks;
+    }
 
-	/**
-	 * Adds a UserBook to this monthly tracker.
-	 * Automatically ignores books already marked as READ.
-	 * the user of the book should be the same and not be null  
-	 */
-	public void addToTracker(UserBook userBook) {
-		if (userBook != null 
-				&& userBook.getUser().equals(this.user) 
-				&& userBook.getShelf() != ShelfStatus.READ) {
+    /**
+     * Adds a user book to the tracker if:
+     * 1. The book belongs to the same user.
+     * 2. The book is not marked as READ.
+     *
+     * @param userBook the book to add to the tracker
+     */
+    public void addToTracker(UserBook userBook) {
+        if (userBook != null
+                && userBook.getUser() != null
+                && userBook.getUser().equals(this.user)
+                && userBook.getShelf() != ShelfStatus.READ) {
 
-			MonthlyTrackerBook goalBook = new MonthlyTrackerBook(this, userBook);
-			goalBooks.add(goalBook);
-		}
-	}
+            MonthlyTrackerBook goalBook = new MonthlyTrackerBook(this, userBook);
+            goalBooks.add(goalBook);
+        }
+    }
 
-	/**
-	 * Removes a book from this tracker.
-	 * 
-	 */
-	public void removeFromTracker(UserBook userBook) {
-		if (userBook == null) return;
+    /**
+     * Removes a user book from the tracker.
+     * @param userBook the book to remove
+     */
+    public void removeFromTracker(UserBook userBook) {
+        if (userBook == null) {
+            return;
+        }
 
-		Iterator<MonthlyTrackerBook> iterator = goalBooks.iterator();
-		while (iterator.hasNext()) {
-			MonthlyTrackerBook goalBook = iterator.next();
-			if (goalBook.getUserBook().equals(userBook)) {
-				iterator.remove();
-				break;
-			}
-		}
-	}
+        Iterator<MonthlyTrackerBook> iterator = goalBooks.iterator();
+        while (iterator.hasNext()) {
+            MonthlyTrackerBook goalBook = iterator.next();
+            if (goalBook.getUserBook().equals(userBook)) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
 
-	/**
-	 * Removes all books marked as completed (READ).
-	 */
-	public void cleanUpCompletedBooks() {
-		goalBooks.removeIf(goalBook -> goalBook.isCompleted());
-	}
+    /**
+     * Removes all completed books from the tracker.
+     */
+    public void cleanUpCompletedBooks() {
+        Iterator<MonthlyTrackerBook> iterator = goalBooks.iterator();
+        while (iterator.hasNext()) {
+            MonthlyTrackerBook goalBook = iterator.next();
+            if (goalBook.isCompleted()) {
+                iterator.remove();
+            }
+        }
+    }
 
-	@Override
-	public String toString() {
-		return String.format(
-				"MonthlyTracker { id=%d, user='%s', month=%s, year=%d, targetBooks=%d, currentBooks=%d }",
-				id, user.getUsername(), month.name(), year,	targetBooksNum, goalBooks.size());
-	}
+    /**
+     * Returns a formatted string of tracker details.
+     * @return string with user, month, year, and progress info
+     */
+    @Override
+    public String toString() {
+        String userName = "Unknown";
+        String monthName = "Unknown";
+
+        if (user != null) {
+            userName = user.getUsername();
+        }
+
+        if (month != null) {
+            monthName = month.name();
+        }
+
+        return "MonthlyTracker { " +
+                "id=" + id +
+                ", user='" + userName + '\'' +
+                ", month=" + monthName +
+                ", year=" + year +
+                ", targetBooks=" + targetBooksNum +
+                ", currentBooks=" + goalBooks.size() +
+                " }";
+    }
 }

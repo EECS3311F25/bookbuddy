@@ -12,12 +12,12 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    // Find all reviews for a specific book
-    List<Review> findByBookCatalogId(Long bookId);
+ 
 
     // Find all reviews written by a specific user
     List<Review> findByUserId(Long userId);
 
     // Find reviews by rating value
     List<Review> findByRating(int rating);
+    List<Review> findByBookId(Long bookId);
 }

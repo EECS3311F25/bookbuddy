@@ -6,18 +6,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Repository for MonthlyTrackerBook entity.
- * Tracks user's monthly reading goals and associated books.
+ * Repository interface for managing {@link MonthlyTrackerBook} entities.
+ *
+ * This repository handles database operations related to books
+ * that are linked to a user's {@link com.bookbuddy.model.MonthlyTracker}.
+ * It provides built-in CRUD operations through {@link JpaRepository}
+ * and also defines a method to find tracker books by their tracker ID.
  */
 @Repository
 public interface MonthlyTrackerBookRepository extends JpaRepository<MonthlyTrackerBook, Long> {
 
-    // Find all monthly trackers by user ID
-    List<MonthlyTrackerBook> findByUserId(Long userId);
-
-    // Find all monthly trackers by month name
-    List<MonthlyTrackerBook> findByMonthName(String monthName);
-
-    // Find a specific monthly tracker for a user by month
-    MonthlyTrackerBook findByUserIdAndMonthName(Long userId, String monthName);
+    /**
+     *
+     * @param trackerId the ID of the {@link com.bookbuddy.model.MonthlyTracker}
+     * @return list of {@link MonthlyTrackerBook} entities belonging to that tracker
+     */
+    List<MonthlyTrackerBook> findByMonthlyTrackerId(Long trackerId);
 }
