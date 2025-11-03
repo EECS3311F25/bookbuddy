@@ -2,7 +2,7 @@
 **Duration:** Oct 20 – Nov 3, 2025  
 **Team Members:**  
 
-- OJ (Frontend Developer)
+- OJ Adeyemi (Frontend Developer)
 - Sanae Faghfouri (Backend Developer)  
 
 
