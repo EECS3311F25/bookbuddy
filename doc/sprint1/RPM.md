@@ -1,4 +1,3 @@
-- OJ 
 # Release Planning Meeting (RPM.md)
 
 **Project:** BookBuddy  
