@@ -20,6 +20,10 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
     List<UserBook> findByUserAndShelf(User user, String shelf);
 
     List<UserBook> findByUserOrderByCreatedAtDesc(User user);
+    
+    List<UserBook> findByUserId(Long userId);
+    
+    List<UserBook> findByBookId(Long bookId); 
 
     long countByUserAndShelf(User user, String shelf);
 }

@@ -1,0 +1,120 @@
+package com.bookbuddy.service;
+
+import com.bookbuddy.model.User;
+import com.bookbuddy.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Service layer for managing {@link User} entities.
+ *
+ * This class handles the business logic for user-related
+ * operations such as registration, login validation, duplicate
+ * checks, updates, and deletions. It acts as an intermediary
+ * between the controller layer and the repository layer.
+ *
+ * Main Tasks in UserService:
+ * 
+ *   Register new users
+ *   Validate login credentials
+ *   Check if user_name or email already exists
+ *   Update or delete user information
+ * 
+ */
+@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    /**
+     * Constructor injection for the UserRepository dependency.
+     * @param userRepository repository instance injected by Spring
+     */
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    /**
+     * Creates or updates a user in the database.
+     * @param user the user entity to be saved or updated
+     * @return the saved {@link User} entity
+     */
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    /**
+     * Retrieves all users from the database.
+     * @return list of all {@link User} entities
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    /**
+     * Retrieves a user by their unique ID.
+     * @param id the user's ID
+     * @return an {@link Optional} containing the user if found
+     */
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    /**
+     * Retrieves a user by their username.
+     * @param username the user's username
+     * @return an {@link Optional} containing the user if found
+     */
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    /**
+     * Checks if a user exists with the specified email.
+     * @param email the user's email address
+     * @return true if the email exists, false otherwise
+     */
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    /**
+     * Deletes a user from the database by ID.
+     * @param id the user's ID
+     */
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    /**
+     * Updates an existing user's information.
+     * Uses the model's built-in update methods for field validation.
+     *
+     * @param id the ID of the user to update
+     * @param newData the user object containing updated fields
+     * @return the updated {@link User} object
+     * @throws EntityNotFoundException if no user is found with the given ID
+     */
+    public User updateUser(Long id, User newData) {
+        Optional<User> existingUserOpt = userRepository.findById(id);
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+
+            existingUser.updateFirstName(newData.getFirstName());
+            existingUser.updateLastName(newData.getLastName());
+            existingUser.updateUsername(newData.getUsername());
+            existingUser.updateEmail(newData.getEmail());
+            existingUser.updatePassword(newData.getPassword());
+
+            return userRepository.save(existingUser);
+        } else {
+            throw new EntityNotFoundException("User not found with id: " + id);
+        }
+    }
+}
