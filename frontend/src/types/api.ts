@@ -1,0 +1,97 @@
+export enum Genre {
+  FICTION = "FICTION",
+  NON_FICTION = "NON_FICTION",
+  FANTASY = "FANTASY",
+  SCIENCE_FICTION = "SCIENCE_FICTION",
+  MYSTERY = "MYSTERY",
+  THRILLER = "THRILLER",
+  ROMANCE = "ROMANCE",
+  HORROR = "HORROR",
+  BIOGRAPHY = "BIOGRAPHY",
+  HISTORY = "HISTORY",
+  SELF_HELP = "SELF_HELP",
+  POETRY = "POETRY",
+  OTHER = "OTHER",
+}
+
+export enum ShelfStatus {
+  WANT_TO_READ = "WANT_TO_READ",
+  CURRENTLY_READING = "CURRENTLY_READING",
+  READ = "READ",
+}
+
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password?: string;
+}
+
+export interface BookCatalog {
+  id: number;
+  title: string;
+  author: string;
+  description?: string;
+  coverUrl?: string;
+  openLibraryId?: string;
+  genre: Genre;
+}
+
+export interface UserBook {
+  id: number;
+  book: BookCatalog;
+  shelf: ShelfStatus;
+  completedAt?: string;
+  createdAt: string;
+}
+
+export interface UserRequest {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface BookCatalogRequest {
+  title: string;
+  author: string;
+  description?: string;
+  coverUrl?: string;
+  openLibraryId?: string;
+  genre?: Genre;
+}
+
+export interface UserBookRequest {
+  userId: number;
+  bookId: number;
+  shelf?: ShelfStatus;
+}
+
+export interface AddBookFromSearchRequest {
+  userId: number;
+  title: string;
+  author: string;
+  openLibraryId: string;
+  coverUrl?: string;
+  genre?: Genre;
+  shelf?: ShelfStatus;
+}
+
+export interface OpenLibrarySearchDoc {
+  key: string;
+  title: string;
+  author_name?: string[];
+  first_publish_year?: number;
+  isbn?: string[];
+  cover_i?: number;
+  edition_count?: number;
+}
+
+export interface OpenLibrarySearchResponse {
+  numFound: number;
+  docs: OpenLibrarySearchDoc[];
+  start: number;
+}
