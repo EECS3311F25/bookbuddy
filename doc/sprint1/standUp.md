@@ -1,19 +1,17 @@
 [OCT 19th] - Sprint 1 Standup 1
 
-1. **What did you work on since the last standup?**
-
+1. What did you work on since the last standup?
 We worked on the product backlog, identifying the main features, defining user stories, and prioritizing them.
 We also started planning the main classes and database entities for the backend.
 
-2. **What do you commit to next?**
-
+2. What do you commit to next?
 We will design the relationships between entities (like User–BookCatalog–MonthlyTrackerBook)
 and finalize the UML class diagram for implementation.
 
-3. **When do you think you will be done?**
-We expect to finish the initial design and documentation by the end of this week.
+3. When do you think you will be done?
+4. We expect to finish the initial design and documentation by the end of this week.
 
-4.** Do you have any blockers?**
+4. Do you have any blockers?
 Not major ones, but we’re still confirming how the entity relationships will
 map in the database (one-to-one vs one-to-many).
 
