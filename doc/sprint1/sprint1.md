@@ -70,7 +70,7 @@ This sprint focuses on building a stable backend structure. Testing of backend f
 
 | Name | Role | Responsibilities | Contact |
 |------|------|------------------|----------|
-| OJ | Frontend Developer | Begin UI phase in Sprint 2 (HTML, CSS, JS) and connect frontend to controllers. |
+| OJ | Frontend Developer | Begin UI phase in Sprint 2 (React and Typescript) and connect frontend to controllers. Support Backend developer in building api controller and swagger docs UI|
 | Sanae |Backend Developer | Implement models, repositories, services, controllers and documentation; lead backend testing next sprint. |
 
 

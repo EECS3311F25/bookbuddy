@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Represents a user's monthly reading goal.
@@ -40,7 +41,7 @@ public class MonthlyTracker {
 
     // The list of books being tracked for this month
     @OneToMany(mappedBy = "monthlyTracker", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<MonthlyTrackerBook> goalBooks = new ArrayList<>();
+    private List<MonthlyTrackerBook> goalBooks = new ArrayList<>();
 
     /** Default constructor (required by JPA). */
     public MonthlyTracker() {}
@@ -103,12 +104,12 @@ public class MonthlyTracker {
     }
 
     /** @return list of all goal books in this tracker */
-    public ArrayList<MonthlyTrackerBook> getGoalBooks() {
+    public List<MonthlyTrackerBook> getGoalBooks() {
         return goalBooks;
     }
 
     /** @param goalBooks sets the list of goal books */
-    public void setGoalBooks(ArrayList<MonthlyTrackerBook> goalBooks) {
+    public void setGoalBooks(List<MonthlyTrackerBook> goalBooks) {
         this.goalBooks = goalBooks;
     }
 

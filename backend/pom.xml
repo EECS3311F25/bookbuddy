@@ -11,10 +11,6 @@
         <version>3.5.6</version>
         <relativePath/>
     </parent>
-    <modules>
-    <module>backend</module>
-</modules>
-
 
     <groupId>com.bookbuddy</groupId>
     <artifactId>bookbuddy-backend</artifactId>
@@ -49,6 +45,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Swagger UI / OpenAPI Documentation -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <!-- SQLite JDBC Driver -->

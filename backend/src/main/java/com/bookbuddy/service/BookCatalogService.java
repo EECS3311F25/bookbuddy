@@ -1,6 +1,8 @@
 package com.bookbuddy.service;
 
+import com.bookbuddy.dto.OpenLibrarySearchResponse;
 import com.bookbuddy.model.BookCatalog;
+import com.bookbuddy.model.Genre;
 import com.bookbuddy.repository.BookCatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,5 +72,44 @@ public class BookCatalogService {
      */
     public void deleteBook(Long id) {
         bookCatalogRepository.deleteById(id);
+    }
+
+    /**
+     * Find or create a BookCatalog entry from Open Library search result.
+     * Checks for existing book by openLibraryId to prevent duplicates.
+     *
+     * @param openLibraryBook the book data from Open Library API
+     * @return existing or newly created BookCatalog entity
+     */
+    public BookCatalog findOrCreateFromOpenLibrary(OpenLibrarySearchResponse.OpenLibraryBook openLibraryBook) {
+        String openLibraryId = openLibraryBook.getKey();
+
+        // Check if book already exists in catalog
+        Optional<BookCatalog> existing = bookCatalogRepository.findByOpenLibraryId(openLibraryId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+
+        // Create new catalog entry
+        BookCatalog newBook = new BookCatalog(
+                openLibraryBook.getTitle(),
+                openLibraryBook.getFirstAuthor()
+        );
+
+        newBook.setOpenLibraryId(openLibraryId);
+        newBook.setGenre(Genre.OTHER); // Default genre
+
+        if (openLibraryBook.getCoverUrl() != null) {
+            newBook.setCoverUrl(openLibraryBook.getCoverUrl());
+        }
+
+        return bookCatalogRepository.save(newBook);
+    }
+
+    /**
+     * Find book by Open Library ID
+     */
+    public Optional<BookCatalog> findByOpenLibraryId(String openLibraryId) {
+        return bookCatalogRepository.findByOpenLibraryId(openLibraryId);
     }
 }

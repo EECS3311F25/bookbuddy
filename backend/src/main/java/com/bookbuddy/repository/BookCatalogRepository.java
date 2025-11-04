@@ -24,4 +24,7 @@ public interface BookCatalogRepository extends JpaRepository<BookCatalog, Long> 
 
     // Find books by genre
     List<BookCatalog> findByGenre(String genre);
+
+    // Find book by Open Library ID (prevents duplicates)
+    Optional<BookCatalog> findByOpenLibraryId(String openLibraryId);
 }
