@@ -9,7 +9,7 @@ We will design the relationships between entities (like User–BookCatalog–Mon
 and finalize the UML class diagram for implementation.
 
 3. When do you think you will be done?
-4. We expect to finish the initial design and documentation by the end of this week.
+We expect to finish the initial design and documentation by the end of this week.
 
 4. Do you have any blockers?
 Not major ones, but we’re still confirming how the entity relationships will
