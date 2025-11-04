@@ -4,6 +4,7 @@ import com.bookbuddy.model.User;
 import com.bookbuddy.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,23 +30,34 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
-     * Constructor injection for the UserRepository dependency.
+     * Constructor injection for dependencies.
      * @param userRepository repository instance injected by Spring
+     * @param passwordEncoder password encoder from SecurityConfig
      */
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
      * Creates or updates a user in the database.
+     * Hashes the password before saving.
      * @param user the user entity to be saved or updated
      * @return the saved {@link User} entity
      */
     public User saveUser(User user) {
-        return userRepository.save(user);
+        System.out.println("DEBUG: Saving user - " + user.getUsername());
+        // Hash password if it's not already hashed (doesn't start with $2a$ which is BCrypt prefix)
+        if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
+            user.updatePassword(passwordEncoder.encode(user.getPassword()));
+        }
+        User savedUser = userRepository.save(user);
+        System.out.println("DEBUG: User saved successfully with ID: " + savedUser.getId());
+        return savedUser;
     }
 
     /**
@@ -110,7 +122,12 @@ public class UserService {
             existingUser.updateLastName(newData.getLastName());
             existingUser.updateUsername(newData.getUsername());
             existingUser.updateEmail(newData.getEmail());
-            existingUser.updatePassword(newData.getPassword());
+
+            // Hash password if updating
+            if (newData.getPassword() != null && !newData.getPassword().isBlank()
+                && !newData.getPassword().startsWith("$2a$")) {
+                existingUser.updatePassword(passwordEncoder.encode(newData.getPassword()));
+            }
 
             return userRepository.save(existingUser);
         } else {

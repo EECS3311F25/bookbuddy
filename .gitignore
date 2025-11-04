@@ -65,3 +65,6 @@ backend/out/
 # Logs
 *.log
 /target/
+
+.project
+.classpath

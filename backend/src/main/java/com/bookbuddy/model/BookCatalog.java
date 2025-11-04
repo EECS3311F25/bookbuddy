@@ -2,19 +2,19 @@ package com.bookbuddy.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a book entry in the global catalog of the application.
- * This entity stores all general information about books that exist in the system,
+ * This entity stores all general information about books that exist in the
+ * system,
  * such as title, author, genre, description, and cover URL.
  * It acts as the main library that is shared among all users.
  * 
  * The global Bank list everyone can access and add from
  */
 @Entity
-@Table(name = "book_catalog") 
+@Table(name = "book_catalog")
 public class BookCatalog {
 
 	@Id
@@ -41,10 +41,10 @@ public class BookCatalog {
 	private Genre genre;
 
 	@OneToMany(mappedBy = "book")
-	private ArrayList<UserBook> userBook;
+	private List<UserBook> userBook;
 
-	public BookCatalog() {}
-
+	public BookCatalog() {
+	}
 
 	public BookCatalog(String title, String author) {
 		this.title = title;
@@ -55,7 +55,7 @@ public class BookCatalog {
 		this.openLibraryId = "";
 	}
 
-	//getters and setters 
+	// getters and setters
 
 	public long getId() {
 		return id;
@@ -112,54 +112,53 @@ public class BookCatalog {
 	public void setGenre(Genre genre) {
 		this.genre = genre;
 	}
+
 	// change book info
 	public void UpdateDetails(String title, String author, String description) {
-		this.title = title; 
-		this.author = author; 
+		this.title = title;
+		this.author = author;
 		this.description = description;
 	}
-	// check if it comes from openlibraryAPI 
+
+	// check if it comes from openlibraryAPI
 	public boolean hasOpenLibraryId() {
-	  return openLibraryId != null && !openLibraryId.isEmpty();
+		return openLibraryId != null && !openLibraryId.isEmpty();
 
 	}
-	
+
 	@Override
-	public String toString() { 
-	
-	 
-	    String bookDescription;
-	    String bookCover;
-	    String bookOpenId;
+	public String toString() {
 
-	    if (description != null && !description.isEmpty()) {
-	        bookDescription = description;
-	    } else {
-	        bookDescription = "N/A";
-	    }
+		String bookDescription;
+		String bookCover;
+		String bookOpenId;
 
-	    if (coverUrl != null && !coverUrl.isEmpty()) {
-	        bookCover = coverUrl;
-	    } else {
-	        bookCover = "N/A";
-	    }
+		if (description != null && !description.isEmpty()) {
+			bookDescription = description;
+		} else {
+			bookDescription = "N/A";
+		}
 
-	    if (openLibraryId != null && !openLibraryId.isEmpty()) {
-	        bookOpenId = openLibraryId;
-	    } else {
-	        bookOpenId = "N/A";
-	    }
+		if (coverUrl != null && !coverUrl.isEmpty()) {
+			bookCover = coverUrl;
+		} else {
+			bookCover = "N/A";
+		}
 
-	    return "BookCatalog{" +
-	            "title='" + this.title + '\'' +
-	            ", author='" + this.author + '\'' +
-	            ", genre='" + this.genre+ '\'' +
-	            ", description='" + bookDescription + '\'' +
-	            ", coverUrl='" + bookCover + '\'' +
-	            ", openLibraryId='" + bookOpenId + '\'' +
-	            '}';
+		if (openLibraryId != null && !openLibraryId.isEmpty()) {
+			bookOpenId = openLibraryId;
+		} else {
+			bookOpenId = "N/A";
+		}
+
+		return "BookCatalog{" +
+				"title='" + this.title + '\'' +
+				", author='" + this.author + '\'' +
+				", genre='" + this.genre + '\'' +
+				", description='" + bookDescription + '\'' +
+				", coverUrl='" + bookCover + '\'' +
+				", openLibraryId='" + bookOpenId + '\'' +
+				'}';
 	}
-
-
 
 }

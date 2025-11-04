@@ -1,6 +1,8 @@
 package com.bookbuddy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.List;
 import java.util.ArrayList;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -40,18 +42,17 @@ public class User {
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Pattern(
-			regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
-			message = "Password must include at least 8 characters, uppercase, lowercase, and numbers"
-			)
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "Password must include at least 8 characters, uppercase, lowercase, and numbers")
 	@Column(nullable = false)
 	private String password;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private ArrayList<UserBook> userBooks = new ArrayList<>();
+	private List<UserBook> userBooks;
 
-
-	public User() {}
+	public User() {
+		this.userBooks = new ArrayList<>();
+	}
 
 	public User(String firstName, String lastName, String username, String email, String password) {
 		this.firstName = firstName;
@@ -59,24 +60,44 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.userBooks = new ArrayList<>();
 	}
 
+	public long getId() {
+		return id;
+	}
 
-	public long getId() { return id; }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-	public String getFirstName() { return firstName; }
+	public String getFirstName() {
+		return firstName;
+	}
 
-	public String getLastName() { return lastName; }
+	public String getLastName() {
+		return lastName;
+	}
 
-	public String getUsername() { return username; }
+	public String getUsername() {
+		return username;
+	}
 
-	public String getEmail() { return email; }
+	public String getEmail() {
+		return email;
+	}
 
-	public String getPassword() { return password; }
+	public String getPassword() {
+		return password;
+	}
 
-	public ArrayList<UserBook> getUserBooks() { return userBooks; }
+	@JsonIgnore
+	public List<UserBook> getUserBooks() {
+		return userBooks;
+	}
 
-	public void setUserBooks(ArrayList<UserBook> userBooks) {
+	@JsonIgnore
+	public void setUserBooks(List<UserBook> userBooks) {
 		this.userBooks = userBooks;
 	}
 
@@ -145,12 +166,10 @@ public class User {
 		return books.toString();
 	}
 
-
 	@Override
 	public String toString() {
 		return String.format(
 				"User { id=%d, firstName='%s', lastName='%s', username='%s', email='%s', totalBooks=%d, books=[%s], password='******' }",
-				id, firstName, lastName, username, email, getTotalBooks(), getBooks()
-				);
+				id, firstName, lastName, username, email, getTotalBooks(), getBooks());
 	}
 }

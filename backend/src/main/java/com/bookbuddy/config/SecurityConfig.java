@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Security configuration
  * Currently permitting all requests for Sprint 0 demonstration
- * TODO: Implement proper JWT authentication in Sprint 1
+ * TODO: Implement proper JWT authentication in Sprint 2
  */
 @Configuration
 @EnableWebSecurity
@@ -20,10 +20,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for REST API
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // Allow all requests for now
-            );
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for REST API
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // Allow all requests for now
+                );
 
         return http.build();
     }
