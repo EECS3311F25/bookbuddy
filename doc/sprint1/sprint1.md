@@ -52,10 +52,12 @@ This sprint focuses on building a stable backend structure. Testing of backend f
 ---
 
 ## Expected Deliverables
-- Fully functional backend (models + repositories + services + controllers)  
-- Connected database with working CRUD operations  
+- Fully functional backend (models + repositories + services + controllers)
+- Connected database with working CRUD operations
 - CRC Cards and System Design Document
 - 3-minute demo video showing API features (Postman demo)
+
+**Demo Video:** [Watch Sprint 1 Demo](https://drive.google.com/file/d/1tUfOc1VzLS5Hd_E8hRU363PZVHI2-O4h/view?usp=drive_link)
 
 ---
 
@@ -81,3 +83,5 @@ This sprint focuses on building a stable backend structure. Testing of backend f
 - **Sanae:** Perform backend testing (Postman + JUnit), bug fixes, and validation checks.  
 - Add REST error handling and response messages.  
 - Prepare demo for full backend + UI integration.
+
+
