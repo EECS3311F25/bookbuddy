@@ -134,4 +134,9 @@ public class UserService {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
     }
+    
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
 }
