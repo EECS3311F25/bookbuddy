@@ -1,8 +1,11 @@
 package com.bookbuddy.controller;
 
+import com.bookbuddy.dto.LoginRequest;
+import com.bookbuddy.dto.UserDTO;
 import com.bookbuddy.dto.UserRequest;
 import com.bookbuddy.model.User;
 import com.bookbuddy.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,25 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    /**
+     * Login user
+     * POST /api/users/login
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest request) {
+        try {
+            User user = userService.login(request.getUsernameOrEmail(), request.getPassword());
+            UserDTO userDTO = UserDTO.fromUser(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid credentials");
+        }
     }
 
     /**
@@ -57,13 +79,13 @@ public class UserController {
                 request.getLastName(),
                 request.getUsername(),
                 request.getEmail(),
-                request.getPassword() // TODO: Hash password with BCrypt in Sprint 2
-        );
+                request.getPassword());
 
         System.out.println("DEBUG: About to save user");
         User savedUser = userService.saveUser(user);
+        UserDTO userDTO = UserDTO.fromUser(savedUser);
         System.out.println("DEBUG: User saved, returning response");
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     /**
@@ -71,9 +93,12 @@ public class UserController {
      * GET /api/users
      */
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        List<UserDTO> userDTOs = users.stream()
+                .map(UserDTO::fromUser)
+                .toList();
+        return ResponseEntity.ok(userDTOs);
     }
 
     /**
@@ -84,7 +109,8 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+            UserDTO userDTO = UserDTO.fromUser(user.get());
+            return ResponseEntity.ok(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with id: " + id);
@@ -99,7 +125,8 @@ public class UserController {
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userService.getUserByUsername(username);
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+            UserDTO userDTO = UserDTO.fromUser(user.get());
+            return ResponseEntity.ok(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with username: " + username);
@@ -121,7 +148,8 @@ public class UserController {
                     request.getPassword());
 
             User updatedUser = userService.updateUser(id, updatedData);
-            return ResponseEntity.ok(updatedUser);
+            UserDTO userDTO = UserDTO.fromUser(updatedUser);
+            return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with id: " + id);

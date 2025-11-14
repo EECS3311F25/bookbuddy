@@ -134,4 +134,35 @@ public class UserService {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
     }
+
+    /**
+     * Authenticates a user by username/email and password.
+     *
+     * @param usernameOrEmail username or email to search for
+     * @param password raw password to verify
+     * @return the authenticated {@link User} if credentials are valid
+     * @throws EntityNotFoundException if user not found
+     * @throws IllegalArgumentException if password is incorrect
+     */
+    public User login(String usernameOrEmail, String password) {
+        // Try to find user by username first, then by email
+        Optional<User> userOpt = userRepository.findByUsername(usernameOrEmail);
+
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByEmail(usernameOrEmail);
+        }
+
+        if (userOpt.isEmpty()) {
+            throw new EntityNotFoundException("User not found with username or email: " + usernameOrEmail);
+        }
+
+        User user = userOpt.get();
+
+        // Verify password using BCrypt
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+
+        return user;
+    }
 }

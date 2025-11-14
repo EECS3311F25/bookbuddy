@@ -87,6 +87,7 @@ public class User {
 		return email;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
