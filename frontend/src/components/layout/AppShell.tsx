@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import MobileNav from "./MobileNav";
 import DesktopNav from "./DesktopNav";
+import DesktopFooter from "./DesktopFooter";
 import { SearchDialog } from "@/components/search/SearchDialog";
 
 interface AppShellProps {
@@ -16,8 +17,9 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-background">
       <DesktopNav onSearchClick={handleSearchOpen} />
-      <main className="pt-14 pb-20 md:pt-16 md:pb-6">{children}</main>
+      <main className="pt-14 pb-20 md:pt-16 md:pb-14">{children}</main>
       <MobileNav onSearchClick={handleSearchOpen} />
+      <DesktopFooter />
       <SearchDialog isOpen={isSearchOpen} onClose={handleSearchClose} />
     </div>
   );

@@ -10,7 +10,7 @@ import { ProfileModal } from "../components/settings/ProfileModal";
 import { AboutDialog } from "../components/settings/AboutDialog";
 import { DeleteConfirmDialog } from "../components/settings/DeleteConfirmDialog";
 import { usersApi } from "../lib/api/services/users";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -192,18 +192,6 @@ export default function SettingsPage() {
               </div>
             </div>
           </SettingsSection>
-
-          {/* Footer */}
-          <div className="text-center space-y-2 pt-2 pb-8">
-            <p className="text-xs text-muted-foreground">
-              Made by{" "}
-              <span className="font-semibold">
-                <a href="https://ojadeyemi.github.io/">OJ Adeyemi</a>
-              </span>{" "}
-              and
-              <span className="font-semibold"> Sanae Faghfouri </span>
-            </p>
-          </div>
         </div>
       </div>
 

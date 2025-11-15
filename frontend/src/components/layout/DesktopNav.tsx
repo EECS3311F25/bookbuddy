@@ -2,7 +2,7 @@ import { Home, BookOpen, TrendingUp, User, Search } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { config } from "../../config";
 import { UserAvatar } from "../common/UserAvatar";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 
 interface DesktopNavProps {
   onSearchClick: () => void;

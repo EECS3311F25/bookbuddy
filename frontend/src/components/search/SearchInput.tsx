@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
-
-const DEFAULT_DEBOUNCE_MS = 600;
+import { DEFAULT_DEBOUNCE_MS, MINIMUM_SEARCH_LENGTH } from "./constants";
 
 interface SearchInputProps {
   onSearch: (query: string) => void;
@@ -22,12 +21,15 @@ export function SearchInput({
     inputRef.current?.focus();
   }, []);
 
-  // Debounced search with minimum 2 non-whitespace characters
+  // Debounced search with minimum character requirement
   useEffect(() => {
     const timer = setTimeout(() => {
       const trimmedValue = value.trim();
-      // Only search if 2+ characters or empty (to clear results)
-      if (trimmedValue.length >= 2 || trimmedValue.length === 0) {
+      // Only search if meets minimum length or empty (to clear results)
+      if (
+        trimmedValue.length >= MINIMUM_SEARCH_LENGTH ||
+        trimmedValue.length === 0
+      ) {
         onSearch(trimmedValue);
       }
     }, debounceMs);

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, Mail, Lock } from "lucide-react";
 import { usersApi } from "../lib/api/services/users";
 import { config } from "../config";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
