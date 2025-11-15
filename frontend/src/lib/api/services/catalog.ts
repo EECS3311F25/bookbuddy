@@ -17,8 +17,14 @@ export const catalogApi = {
     return data;
   },
 
-  async updateBook(bookId: number, request: BookCatalogRequest): Promise<BookCatalog> {
-    const { data } = await apiClient.put<BookCatalog>(`/api/catalog/${bookId}`, request);
+  async updateBook(
+    bookId: number,
+    request: BookCatalogRequest,
+  ): Promise<BookCatalog> {
+    const { data } = await apiClient.put<BookCatalog>(
+      `/api/catalog/${bookId}`,
+      request,
+    );
     return data;
   },
 

@@ -26,7 +26,11 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  password?: string;
+}
+
+export interface LoginRequest {
+  usernameOrEmail: string;
+  password: string;
 }
 
 export interface BookCatalog {
