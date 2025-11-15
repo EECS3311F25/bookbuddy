@@ -140,6 +140,23 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
         try {
+            // Get the existing user to check if username is changing
+            Optional<User> existingUserOpt = userService.getUserById(id);
+            if (existingUserOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + id);
+            }
+
+            User existingUser = existingUserOpt.get();
+
+            // Check if username is being changed and if new username already exists
+            if (!existingUser.getUsername().equals(request.getUsername())) {
+                if (userService.getUserByUsername(request.getUsername()).isPresent()) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body("Username already exists");
+                }
+            }
+
             User updatedData = new User(
                     request.getFirstName(),
                     request.getLastName(),
@@ -150,9 +167,12 @@ public class UserController {
             User updatedUser = userService.updateUser(id, updatedData);
             UserDTO userDTO = UserDTO.fromUser(updatedUser);
             return ResponseEntity.ok(userDTO);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with id: " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating user");
         }
     }
 

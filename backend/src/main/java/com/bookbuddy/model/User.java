@@ -42,7 +42,7 @@ public class User {
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "Password must include at least 8 characters, uppercase, lowercase, and numbers")
+	@Pattern(regexp = "^$|^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "Password must include at least 8 characters, uppercase, lowercase, and numbers")
 	@Column(nullable = false)
 	private String password;
 
