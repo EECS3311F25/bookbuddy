@@ -1,8 +1,16 @@
-import { Home, BookOpen, TrendingUp, User } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, Search } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { config } from "../../config";
+import { UserAvatar } from "../common/UserAvatar";
+import { useAuth } from "../../contexts/AuthContext";
 
-export default function DesktopNav() {
+interface DesktopNavProps {
+  onSearchClick: () => void;
+}
+
+export default function DesktopNav({ onSearchClick }: DesktopNavProps) {
+  const { user } = useAuth();
+
   return (
     <nav className="hidden md:flex fixed top-0 left-0 right-0 bg-card border-b border-border z-50">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
@@ -19,7 +27,7 @@ export default function DesktopNav() {
           </h1>
         </div>
 
-        {/* Nav Links */}
+        {/* Center Nav Links */}
         <div className="flex items-center gap-1">
           <NavLink
             to="/home"
@@ -76,6 +84,28 @@ export default function DesktopNav() {
             <User className="w-5 h-5" />
             <span className="font-medium">Settings</span>
           </NavLink>
+        </div>
+
+        {/* Right Side: Search + Avatar */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onSearchClick}
+            className="p-2 hover:bg-muted rounded-lg transition text-muted-foreground hover:text-foreground"
+            aria-label="Search books"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+
+          {user && (
+            <NavLink to="/settings">
+              <UserAvatar
+                firstName={user.firstName}
+                lastName={user.lastName}
+                email={user.email}
+                size="sm"
+              />
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

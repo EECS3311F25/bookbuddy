@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { config } from "../../config";
+import { config } from "@/config";
 
 interface AboutDialogProps {
   isOpen: boolean;

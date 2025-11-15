@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { BookOpen, Mail, Lock } from "lucide-react";
 import { usersApi } from "../lib/api/services/users";
 import { config } from "../config";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,8 +38,8 @@ export default function LoginPage() {
         password,
       });
 
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(user));
+      // Update auth context (will auto-sync to localStorage)
+      setUser(user);
 
       // Navigate to home
       navigate("/home");

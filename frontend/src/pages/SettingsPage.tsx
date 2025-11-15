@@ -10,40 +10,31 @@ import { ProfileModal } from "../components/settings/ProfileModal";
 import { AboutDialog } from "../components/settings/AboutDialog";
 import { DeleteConfirmDialog } from "../components/settings/DeleteConfirmDialog";
 import { usersApi } from "../lib/api/services/users";
-import type { User } from "../types/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<User | null>(null);
+  const { user, setUser, logout } = useAuth();
   const [notifications, setNotifications] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Load user data and preferences on mount
+  // Redirect to login if not authenticated
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) {
-      try {
-        setUserData(JSON.parse(stored));
-      } catch {
-        console.error("Failed to parse user data");
-        navigate("/login");
-        return;
-      }
-    } else {
+    if (!user) {
       navigate("/login");
-      return;
     }
+  }, [user, navigate]);
 
+  // Load preferences on mount
+  useEffect(() => {
     const notificationsStored = localStorage.getItem("bookbuddy_notifications");
     if (notificationsStored !== null) {
       setNotifications(JSON.parse(notificationsStored));
     }
-    setIsLoading(false);
-  }, [navigate]);
+  }, []);
 
   // Save profile updates to backend
   const handleSaveProfile = async (data: {
@@ -52,11 +43,11 @@ export default function SettingsPage() {
     username: string;
     email: string;
   }) => {
-    if (!userData) return;
+    if (!user) return;
 
     try {
       // Call backend API to update user
-      const updatedUser = await usersApi.updateUser(userData.id, {
+      const updatedUser = await usersApi.updateUser(user.id, {
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
@@ -64,9 +55,8 @@ export default function SettingsPage() {
         password: "", // Password not changed here
       });
 
-      // Update local state and localStorage
-      setUserData(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // Update auth context (will auto-sync to localStorage)
+      setUser(updatedUser);
     } catch (error) {
       const err = error as { response?: { data?: string } };
       throw new Error(err.response?.data || "Failed to update profile");
@@ -78,21 +68,21 @@ export default function SettingsPage() {
     currentPassword: string,
     newPassword: string,
   ) => {
-    if (!userData) return;
+    if (!user) return;
 
     try {
       // First verify current password by attempting login
       await usersApi.login({
-        usernameOrEmail: userData.email,
+        usernameOrEmail: user.email,
         password: currentPassword,
       });
 
       // Update user with new password
-      await usersApi.updateUser(userData.id, {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        username: userData.username,
-        email: userData.email,
+      await usersApi.updateUser(user.id, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
         password: newPassword,
       });
     } catch (error) {
@@ -112,20 +102,18 @@ export default function SettingsPage() {
 
   // Logout
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("bookbuddy_notifications");
+    logout();
     navigate("/login");
   };
 
   // Delete account
   const handleDeleteAccount = async () => {
-    if (!userData) return;
+    if (!user) return;
 
     setIsDeleting(true);
     try {
-      await usersApi.deleteUser(userData.id);
-      localStorage.removeItem("user");
-      localStorage.removeItem("bookbuddy_notifications");
+      await usersApi.deleteUser(user.id);
+      logout();
       navigate("/login");
     } catch (error) {
       console.error("Failed to delete account:", error);
@@ -134,18 +122,8 @@ export default function SettingsPage() {
     }
   };
 
-  if (isLoading || !userData) {
-    return (
-      <AppShell>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <div className="animate-pulse text-muted-foreground">
-              Loading settings...
-            </div>
-          </div>
-        </div>
-      </AppShell>
-    );
+  if (!user) {
+    return null;
   }
 
   return (
@@ -158,14 +136,14 @@ export default function SettingsPage() {
             <SettingsItem
               icon={
                 <UserAvatar
-                  firstName={userData.firstName}
-                  lastName={userData.lastName}
-                  email={userData.email}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  email={user.email}
                   size="sm"
                 />
               }
-              label={`${userData.firstName} ${userData.lastName}`}
-              value={userData.email}
+              label={`${user.firstName} ${user.lastName}`}
+              value={user.email}
               onClick={() => setIsEditModalOpen(true)}
             />
           </SettingsSection>
@@ -218,7 +196,11 @@ export default function SettingsPage() {
           {/* Footer */}
           <div className="text-center space-y-2 pt-2 pb-8">
             <p className="text-xs text-muted-foreground">
-              Made by <span className="font-semibold">OJ Adeyemi</span> and
+              Made by{" "}
+              <span className="font-semibold">
+                <a href="https://ojadeyemi.github.io/">OJ Adeyemi</a>
+              </span>{" "}
+              and
               <span className="font-semibold"> Sanae Faghfouri </span>
             </p>
           </div>
@@ -229,7 +211,7 @@ export default function SettingsPage() {
       <ProfileModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        userData={userData}
+        userData={user}
         onSaveProfile={handleSaveProfile}
         onChangePassword={handleChangePassword}
       />
