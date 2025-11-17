@@ -121,7 +121,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
+          <div className="flex items-center justify-between p-4 border-b border-border shrink-0">
             <h2 className="text-lg font-bold text-foreground">Search Books</h2>
             <button
               onClick={onClose}
@@ -133,7 +133,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           </div>
 
           {/* Search Input */}
-          <div className="p-4 border-b border-border flex-shrink-0">
+          <div className="p-4 border-b border-border shrink-0">
             <SearchInput onSearch={handleSearch} />
           </div>
 
