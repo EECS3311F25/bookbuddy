@@ -1,11 +1,13 @@
 package com.bookbuddy.controller;
 
+import com.bookbuddy.dto.MonthlyTrackerBookRequest;
 import com.bookbuddy.model.MonthlyTracker;
 import com.bookbuddy.model.MonthlyTrackerBook;
 import com.bookbuddy.model.UserBook;
 import com.bookbuddy.service.MonthlyTrackerBookService;
 import com.bookbuddy.service.MonthlyTrackerService;
 import com.bookbuddy.service.UserBookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,25 +41,22 @@ public class MonthlyTrackerBookController {
     /**
      * Add a UserBook to a MonthlyTracker.
      *
-     * @param trackerId ID of the monthly tracker
-     * @param userBookId ID of the user's book
+     * @param request contains tracker ID and user book ID
      * @return created MonthlyTrackerBook record
      */
     @PostMapping
-    public ResponseEntity<?> addBookToTracker(
-            @RequestParam Long trackerId,
-            @RequestParam Long userBookId) {
+    public ResponseEntity<?> addBookToTracker(@Valid @RequestBody MonthlyTrackerBookRequest request) {
 
-        Optional<MonthlyTracker> tracker = monthlyTrackerService.getTrackerById(trackerId);
+        Optional<MonthlyTracker> tracker = monthlyTrackerService.getTrackerById(request.getMonthlyTrackerId());
         if (tracker.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("MonthlyTracker not found with id: " + trackerId);
+                    .body("MonthlyTracker not found with id: " + request.getMonthlyTrackerId());
         }
 
-        Optional<UserBook> userBook = userBookService.getUserBookById(userBookId);
+        Optional<UserBook> userBook = userBookService.getUserBookById(request.getUserBookId());
         if (userBook.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("UserBook not found with id: " + userBookId);
+                    .body("UserBook not found with id: " + request.getUserBookId());
         }
 
         MonthlyTrackerBook trackerBook = new MonthlyTrackerBook(tracker.get(), userBook.get());

@@ -1,8 +1,12 @@
 package com.bookbuddy.controller;
 
+import com.bookbuddy.dto.MonthlyTrackerRequest;
 import com.bookbuddy.model.MonthlyTracker;
+import com.bookbuddy.model.Months;
+import com.bookbuddy.model.User;
 import com.bookbuddy.service.MonthlyTrackerService;
 import com.bookbuddy.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,17 +37,32 @@ public class MonthlyTrackerController {
     /**
      * Create a new monthly tracker.
      *
-     * @param tracker new tracker data
+     * @param request new tracker data
      * @return created tracker
      */
     @PostMapping
-    public ResponseEntity<?> createTracker(@RequestBody MonthlyTracker tracker) {
+    public ResponseEntity<?> createTracker(@Valid @RequestBody MonthlyTrackerRequest request) {
 
-        Optional<?> user = userService.getUserById(tracker.getUser().getId());
-        if (user.isEmpty()) {
+        Optional<User> userOpt = userService.getUserById(request.getUserId());
+        if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User not found");
+                    .body("User not found with id: " + request.getUserId());
         }
+
+        User user = userOpt.get();
+
+        // Convert month number to Months enum
+        Months monthEnum;
+        try {
+            monthEnum = Months.fromValue(request.getMonth());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid month number: " + request.getMonth());
+        }
+
+        MonthlyTracker tracker = new MonthlyTracker(user, monthEnum);
+        tracker.setYear(String.valueOf(request.getYear()));
+        tracker.setTargetBooksNum(request.getMonthlyGoal());
 
         MonthlyTracker savedTracker = monthlyTrackerService.saveTracker(tracker);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTracker);
