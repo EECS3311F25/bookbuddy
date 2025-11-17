@@ -1,7 +1,12 @@
 import { apiClient } from "../client";
-import type { User, UserRequest } from "../../../types/api";
+import type { User, UserRequest, LoginRequest } from "../../../types/api";
 
 export const usersApi = {
+  async login(request: LoginRequest): Promise<User> {
+    const { data } = await apiClient.post<User>("/api/users/login", request);
+    return data;
+  },
+
   async register(request: UserRequest): Promise<User> {
     const { data } = await apiClient.post<User>("/api/users/register", request);
     return data;
@@ -18,7 +23,9 @@ export const usersApi = {
   },
 
   async getUserByUsername(username: string): Promise<User> {
-    const { data } = await apiClient.get<User>(`/api/users/username/${username}`);
+    const { data } = await apiClient.get<User>(
+      `/api/users/username/${username}`,
+    );
     return data;
   },
 

@@ -26,7 +26,11 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  password?: string;
+}
+
+export interface LoginRequest {
+  usernameOrEmail: string;
+  password: string;
 }
 
 export interface BookCatalog {
@@ -80,18 +84,16 @@ export interface AddBookFromSearchRequest {
   shelf?: ShelfStatus;
 }
 
-export interface OpenLibrarySearchDoc {
-  key: string;
+export interface BookSearchResult {
+  openLibraryId: string;
   title: string;
-  author_name?: string[];
-  first_publish_year?: number;
-  isbn?: string[];
-  cover_i?: number;
-  edition_count?: number;
+  author: string;
+  coverUrl: string | null;
+  publishYear: number | null;
 }
 
-export interface OpenLibrarySearchResponse {
-  numFound: number;
-  docs: OpenLibrarySearchDoc[];
-  start: number;
+export interface SearchResponse {
+  totalResults: number;
+  currentPage: number;
+  books: BookSearchResult[];
 }

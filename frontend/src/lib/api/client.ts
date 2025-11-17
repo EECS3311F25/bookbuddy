@@ -1,13 +1,12 @@
-import axios, { AxiosError, AxiosInstance } from "axios";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-
+import axios, { AxiosError, type AxiosInstance } from "axios";
+import { config } from "../../config";
+const API_BASE_URL = config.apiBaseUrl;
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 10000,
+  timeout: config.apiTimeout,
 });
 
 // Request interceptor
@@ -18,7 +17,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor
@@ -39,5 +38,5 @@ apiClient.interceptors.response.use(
       console.error("Error:", error.message);
     }
     return Promise.reject(error);
-  }
+  },
 );

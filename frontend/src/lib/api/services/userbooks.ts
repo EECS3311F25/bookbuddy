@@ -1,9 +1,16 @@
 import { apiClient } from "../client";
-import type { UserBook, UserBookRequest, AddBookFromSearchRequest, ShelfStatus } from "../../../types/api";
+import type {
+  UserBook,
+  UserBookRequest,
+  AddBookFromSearchRequest,
+  ShelfStatus,
+} from "../../../types/api";
 
 export const userbooksApi = {
   async getUserBooks(userId: number): Promise<UserBook[]> {
-    const { data } = await apiClient.get<UserBook[]>(`/api/userbooks/user/${userId}`);
+    const { data } = await apiClient.get<UserBook[]>(
+      `/api/userbooks/user/${userId}`,
+    );
     return data;
   },
 
@@ -22,15 +29,24 @@ export const userbooksApi = {
     return data;
   },
 
-  async addBookFromSearch(request: AddBookFromSearchRequest): Promise<UserBook> {
-    const { data } = await apiClient.post<UserBook>("/api/userbooks/add-from-search", request);
+  async addBookFromSearch(
+    request: AddBookFromSearchRequest,
+  ): Promise<UserBook> {
+    const { data } = await apiClient.post<UserBook>(
+      "/api/userbooks/add-from-search",
+      request,
+    );
     return data;
   },
 
   async updateShelfStatus(id: number, shelf: ShelfStatus): Promise<UserBook> {
-    const { data } = await apiClient.put<UserBook>(`/api/userbooks/${id}/shelf`, null, {
-      params: { shelf },
-    });
+    const { data } = await apiClient.put<UserBook>(
+      `/api/userbooks/${id}/shelf`,
+      null,
+      {
+        params: { shelf },
+      },
+    );
     return data;
   },
 
