@@ -12,23 +12,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * REST Controller for Open Library book search
+ * Controller for handling book searches through the Open Library API.
  */
 @RestController
-@RequestMapping("/api/search")
-@CrossOrigin(origins = "http://localhost:5173")
-public class SearchController {
+@RequestMapping("/api/openlibrary")
+// @CrossOrigin
+public class OpenLibraryController {
 
     private final OpenLibraryService openLibraryService;
 
     @Autowired
-    public SearchController(OpenLibraryService openLibraryService) {
+    public OpenLibraryController(OpenLibraryService openLibraryService) {
         this.openLibraryService = openLibraryService;
     }
 
     /**
-     * Search books using Open Library API
-     * GET /api/search?q=lord+of+the+rings&limit=10&page=1
+     * Search books using a general text query.
+     *
+     * @param q     search text
+     * @param limit maximum number of results
+     * @param page  page number for pagination
+     * @return search results returned by Open Library
      */
     @GetMapping
     public ResponseEntity<SearchResponseDTO> searchBooks(
@@ -42,8 +46,11 @@ public class SearchController {
     }
 
     /**
-     * Search books by title
-     * GET /api/search/by-title?title=lord+of+the+rings&limit=10
+     * Search books using title only.
+     *
+     * @param title title of the book
+     * @param limit maximum number of results
+     * @return search results returned by Open Library
      */
     @GetMapping("/by-title")
     public ResponseEntity<SearchResponseDTO> searchByTitle(
@@ -56,8 +63,11 @@ public class SearchController {
     }
 
     /**
-     * Search books by author
-     * GET /api/search/by-author?author=tolkien&limit=10
+     * Search books using author name only.
+     *
+     * @param author author name
+     * @param limit  maximum number of results
+     * @return search results returned by Open Library
      */
     @GetMapping("/by-author")
     public ResponseEntity<SearchResponseDTO> searchByAuthor(
