@@ -9,7 +9,7 @@ interface SearchParams {
 
 export const searchService = {
   async searchBooks(params: SearchParams): Promise<SearchResponse> {
-    const { data } = await apiClient.get<SearchResponse>("/api/search", {
+    const { data } = await apiClient.get<SearchResponse>("/api/openlibrary", {
       params: {
         q: params.q,
         limit: params.limit,
