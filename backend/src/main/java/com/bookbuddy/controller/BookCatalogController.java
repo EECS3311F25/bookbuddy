@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST Controller for BookCatalog operations
- * Handles global book catalog (books available to all users)
+ * Handles all API operations for the global book catalog.
  */
 @RestController
 @RequestMapping("/api/catalog")
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin
 public class BookCatalogController {
 
     private final BookCatalogService bookCatalogService;
@@ -29,8 +28,9 @@ public class BookCatalogController {
     }
 
     /**
-     * Get all books in the catalog
-     * GET /api/catalog
+     * Get all books in the catalog.
+     *
+     * @return list of all catalog books
      */
     @GetMapping
     public ResponseEntity<List<BookCatalog>> getAllBooks() {
@@ -39,12 +39,15 @@ public class BookCatalogController {
     }
 
     /**
-     * Get book by ID
-     * GET /api/catalog/{bookId}
+     * Get one book by its ID.
+     *
+     * @param bookId ID of the book
+     * @return the book or a not-found message
      */
     @GetMapping("/{bookId}")
     public ResponseEntity<?> getBookById(@PathVariable Long bookId) {
         Optional<BookCatalog> book = bookCatalogService.getBookById(bookId);
+
         if (book.isPresent()) {
             return ResponseEntity.ok(book.get());
         } else {
@@ -54,11 +57,15 @@ public class BookCatalogController {
     }
 
     /**
-     * Add a new book to the catalog
-     * POST /api/catalog
+     * Add a new book to the catalog.
+     *
+     * @param request data for creating a new book
+     * @return the created book
      */
     @PostMapping
     public ResponseEntity<?> addBook(@Valid @RequestBody BookCatalogRequest request) {
+
+        // Convert DTO → Entity
         BookCatalog book = new BookCatalog(request.getTitle(), request.getAuthor());
         book.setDescription(request.getDescription());
         book.setCoverUrl(request.getCoverUrl());
@@ -70,11 +77,16 @@ public class BookCatalogController {
     }
 
     /**
-     * Update an existing book in the catalog
-     * PUT /api/catalog/{bookId}
+     * Update an existing book in the catalog.
+     *
+     * @param bookId ID of the book to update
+     * @param request new updated book data
+     * @return updated book or not-found message
      */
     @PutMapping("/{bookId}")
-    public ResponseEntity<?> updateBook(@PathVariable Long bookId, @Valid @RequestBody BookCatalogRequest request) {
+    public ResponseEntity<?> updateBook(@PathVariable Long bookId,
+                                        @Valid @RequestBody BookCatalogRequest request) {
+
         Optional<BookCatalog> existingBook = bookCatalogService.getBookById(bookId);
 
         if (existingBook.isEmpty()) {
@@ -82,6 +94,7 @@ public class BookCatalogController {
                     .body("Book not found with id: " + bookId);
         }
 
+        // Update the book
         BookCatalog book = existingBook.get();
         book.UpdateDetails(request.getTitle(), request.getAuthor(), request.getDescription());
         book.setCoverUrl(request.getCoverUrl());
@@ -93,12 +106,15 @@ public class BookCatalogController {
     }
 
     /**
-     * Delete a book from the catalog
-     * DELETE /api/catalog/{bookId}
+     * Delete a book from the catalog.
+     *
+     * @param bookId ID of the book to delete
+     * @return success or not-found message
      */
     @DeleteMapping("/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
         Optional<BookCatalog> book = bookCatalogService.getBookById(bookId);
+
         if (book.isPresent()) {
             bookCatalogService.deleteBook(bookId);
             return ResponseEntity.ok("Book deleted successfully");
