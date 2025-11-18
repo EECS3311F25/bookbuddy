@@ -8,7 +8,12 @@ export default function DesktopFooter() {
             <a href="https://ojadeyemi.github.io/">OJ Adeyemi</a>
           </span>{" "}
           and
-          <span className="font-semibold"> Sanae Faghfouri</span>
+          <span className="font-semibold">
+            {" "}
+            <a href="https://www.linkedin.com/in/sanae-faghfouri-735848283/">
+              Sanae Faghfouri
+            </a>
+          </span>
         </p>
       </div>
     </footer>

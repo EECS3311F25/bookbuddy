@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/catalog")
-//@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class BookCatalogController {
 
     private final BookCatalogService bookCatalogService;
@@ -79,13 +79,13 @@ public class BookCatalogController {
     /**
      * Update an existing book in the catalog.
      *
-     * @param bookId ID of the book to update
+     * @param bookId  ID of the book to update
      * @param request new updated book data
      * @return updated book or not-found message
      */
     @PutMapping("/{bookId}")
     public ResponseEntity<?> updateBook(@PathVariable Long bookId,
-                                        @Valid @RequestBody BookCatalogRequest request) {
+            @Valid @RequestBody BookCatalogRequest request) {
 
         Optional<BookCatalog> existingBook = bookCatalogService.getBookById(bookId);
 

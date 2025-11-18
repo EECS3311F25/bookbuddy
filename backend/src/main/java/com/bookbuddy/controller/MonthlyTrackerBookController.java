@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/monthly-tracker-books")
-//@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class MonthlyTrackerBookController {
 
     private final MonthlyTrackerBookService trackerBookService;

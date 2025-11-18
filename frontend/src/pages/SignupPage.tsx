@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BookOpen, Mail, Lock, User } from "lucide-react";
-import { usersApi } from "../lib/api/services/users";
-import { config } from "../config";
+import { usersService } from "@/services";
+import { config } from "@/config";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      const user = await usersApi.register({
+      const user = await usersService.register({
         firstName: formData.firstName,
         lastName: formData.lastName,
         username: formData.username,

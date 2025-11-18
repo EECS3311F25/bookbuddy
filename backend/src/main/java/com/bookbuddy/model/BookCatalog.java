@@ -30,7 +30,7 @@ public class BookCatalog {
 	@Column(length = 2000)
 	private String description;
 
-	@Column(unique = true)
+	@Column
 	private String coverUrl;
 
 	@Column(unique = true)

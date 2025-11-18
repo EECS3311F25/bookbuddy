@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/monthly-tracker")
-// @CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class MonthlyTrackerController {
 
     private final MonthlyTrackerService monthlyTrackerService;

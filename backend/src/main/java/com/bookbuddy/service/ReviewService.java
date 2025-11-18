@@ -11,9 +11,11 @@ import java.util.Optional;
 @Service
 /**
  * Service layer for managing {@link Review} entities.
- * Handles all the operations related to the user reviews, including creating, updating , deletion, and retrieving reviews
- * for specific books.It also calculate the average ratings for books based on submitted user feedback. 
- * Main tasks : 
+ * Handles all the operations related to the user reviews, including creating,
+ * updating , deletion, and retrieving reviews
+ * for specific books.It also calculate the average ratings for books based on
+ * submitted user feedback.
+ * Main tasks :
  * 1. save or update book reviews
  * 2. retrieve reviews by book or bookID
  * 3. Delete Reviews
@@ -21,13 +23,12 @@ import java.util.Optional;
  * 
  */
 public class ReviewService {
-	
-	
- 
-	private final ReviewRepository reviewRepository;
+
+    private final ReviewRepository reviewRepository;
 
     /**
      * Constructor injection for the ReviewRepository dependency.
+     * 
      * @param reviewRepository repository instance injected by Spring
      */
     @Autowired
@@ -37,6 +38,7 @@ public class ReviewService {
 
     /**
      * Saves or updates a {@link Review} entry in the database.
+     * 
      * @param review the {@link Review} entity to be saved or updated
      * @return the saved {@link Review} entity
      */
@@ -46,6 +48,7 @@ public class ReviewService {
 
     /**
      * Retrieves all {@link Review} entries from the database.
+     * 
      * @return list of all {@link Review} entities
      */
     public List<Review> getAllReviews() {
@@ -54,6 +57,7 @@ public class ReviewService {
 
     /**
      * Retrieves a specific {@link Review} by its unique ID.
+     * 
      * @param id the unique ID of the review
      * @return an {@link Optional} containing the review if found
      */
@@ -63,6 +67,7 @@ public class ReviewService {
 
     /**
      * Deletes a {@link Review} entry from the database by ID.
+     * 
      * @param id the unique ID of the review to be deleted
      */
     public void deleteReview(Long id) {
@@ -71,7 +76,9 @@ public class ReviewService {
 
     /**
      * Retrieves all {@link Review} entries associated with a specific catalog book.
-     * @param bookId the ID of the {@link com.bookbuddy.model.BookCatalog} being reviewed
+     * 
+     * @param bookId the ID of the {@link com.bookbuddy.model.BookCatalog} being
+     *               reviewed
      * @return list of {@link Review} entities linked to the specified catalog book
      */
     public List<Review> getReviewsByBookId(Long bookId) {
@@ -80,7 +87,9 @@ public class ReviewService {
 
     /**
      * Calculates the average rating for a given catalog book.
-     * @param bookId the ID of the {@link com.bookbuddy.model.BookCatalog} whose average rating is to be calculated
+     * 
+     * @param bookId the ID of the {@link com.bookbuddy.model.BookCatalog} whose
+     *               average rating is to be calculated
      * @return the average rating value as a double (0.0 if no reviews exist)
      */
     public double getAverageRating(Long bookId) {
@@ -97,5 +106,16 @@ public class ReviewService {
 
         return total / reviews.size();
     }
-  
+
+    /**
+     * Retrieves all {@link Review} entries associated with a specific user.
+     * 
+     * @param userId the ID of the {@link com.bookbuddy.model.User} who authored the
+     *               reviews
+     * @return list of {@link Review} entities authored by the specified user
+     */
+    public List<Review> getReviewsByUserId(Long userId) {
+        return reviewRepository.findByUserId(userId);
+    }
+
 }

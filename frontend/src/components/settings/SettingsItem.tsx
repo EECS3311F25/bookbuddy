@@ -27,7 +27,7 @@ export function SettingsItem({
       }`}
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
-        <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center shrink-0">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
@@ -39,7 +39,7 @@ export function SettingsItem({
         {children}
       </div>
       {isClickable && onClick && (
-        <ChevronRight className="w-5 h-5 text-muted-foreground ml-2 flex-shrink-0" />
+        <ChevronRight className="w-5 h-5 text-muted-foreground ml-2 shrink-0" />
       )}
     </div>
   );
