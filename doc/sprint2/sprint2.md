@@ -76,3 +76,5 @@ Search UI, Authentication, User Settings, integration fixes, cleanup.
 - JUnit tests for all services  
 - Updated system design  
 - Sprint 2 demo video  
+
+**Demo Video:** [Watch Sprint 2 Demo](https://drive.google.com/file/d/15OriXsRxZ0OC3wtKw-V3DeH9JN6nyLj_/view?usp=drive_link)

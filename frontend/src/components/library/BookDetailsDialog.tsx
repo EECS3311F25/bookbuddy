@@ -54,12 +54,16 @@ export function BookDetailsDialog({
   const loadReviews = async () => {
     setIsLoadingReviews(true);
     try {
-      const reviewsData = await reviewsService.getReviewsByBook(userBook.book.id);
+      const reviewsData = await reviewsService.getReviewsByBook(
+        userBook.book.id,
+      );
       setReviews(reviewsData);
 
       // Only fetch average if reviews exist
       if (reviewsData.length > 0) {
-        const avgRating = await reviewsService.getAverageRating(userBook.book.id);
+        const avgRating = await reviewsService.getAverageRating(
+          userBook.book.id,
+        );
         setAverageRating(avgRating);
       } else {
         setAverageRating(0);
@@ -67,7 +71,7 @@ export function BookDetailsDialog({
     } catch (error) {
       console.error("Failed to load reviews:", error);
       // Don't show error toast if it's just missing reviews (404)
-      if (error && typeof error === 'object' && 'response' in error) {
+      if (error && typeof error === "object" && "response" in error) {
         const axiosError = error as { response?: { status?: number } };
         if (axiosError.response?.status !== 404) {
           toast.error("Failed to load reviews");

@@ -1,5 +1,6 @@
 package com.bookbuddy.controller;
 
+import com.bookbuddy.dto.ReviewRequest;
 import com.bookbuddy.model.Review;
 import com.bookbuddy.service.ReviewService;
 import com.bookbuddy.service.BookCatalogService;
@@ -37,22 +38,31 @@ public class ReviewController {
     /**
      * Submit a review for a book.
      *
-     * @param review review data
+     * @param request review data containing userId, bookId, rating, and optional reviewText
      * @return created review
      */
     @PostMapping
-    public ResponseEntity<?> addReview(@RequestBody Review review) {
+    public ResponseEntity<?> addReview(@RequestBody ReviewRequest request) {
 
-        Optional<?> user = userService.getUserById(review.getUser().getId());
+        Optional<?> user = userService.getUserById(request.getUserId());
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found");
         }
 
-        Optional<?> book = bookCatalogService.getBookById(review.getBook().getId());
+        Optional<?> book = bookCatalogService.getBookById(request.getBookId());
         if (book.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Book not found");
+        }
+
+        // Build the Review entity from the request DTO
+        Review review = new Review();
+        review.setUser((com.bookbuddy.model.User) user.get());
+        review.setBook((com.bookbuddy.model.BookCatalog) book.get());
+        review.setRating(request.getRating());
+        if (request.getReviewText() != null) {
+            review.setComment(request.getReviewText());
         }
 
         Review savedReview = reviewService.saveReview(review);
