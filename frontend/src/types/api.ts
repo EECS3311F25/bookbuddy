@@ -4,13 +4,12 @@ export enum Genre {
   FANTASY = "FANTASY",
   SCIENCE_FICTION = "SCIENCE_FICTION",
   MYSTERY = "MYSTERY",
-  THRILLER = "THRILLER",
   ROMANCE = "ROMANCE",
-  HORROR = "HORROR",
-  BIOGRAPHY = "BIOGRAPHY",
+  CLASSICS = "CLASSICS",
+  PHYLOSOPHY = "PHYLOSOPHY",
   HISTORY = "HISTORY",
-  SELF_HELP = "SELF_HELP",
-  POETRY = "POETRY",
+  BIOGRAPHY = "BIOGRAPHY",
+  PSYCHOLOGY = "PSYCHOLOGY",
   OTHER = "OTHER",
 }
 
@@ -96,4 +95,20 @@ export interface SearchResponse {
   totalResults: number;
   currentPage: number;
   books: BookSearchResult[];
+}
+
+export interface ReviewRequest {
+  userId: number;
+  bookId: number;
+  rating: number;
+  reviewText?: string;
+}
+
+export interface ReviewResponse {
+  id: number;
+  username: string;
+  bookTitle: string;
+  bookId: number;
+  rating: number;
+  reviewText?: string;
 }

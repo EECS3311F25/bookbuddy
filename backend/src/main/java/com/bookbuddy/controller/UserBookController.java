@@ -2,8 +2,8 @@ package com.bookbuddy.controller;
 
 import com.bookbuddy.dto.AddBookFromSearchRequest;
 import com.bookbuddy.dto.UserBookRequest;
-import com.bookbuddy.model.*; 
-import com.bookbuddy.service.*; 
+import com.bookbuddy.model.*;
+import com.bookbuddy.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/userbooks")
-// @CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserBookController {
 
     private final UserBookService userBookService;
@@ -88,7 +88,7 @@ public class UserBookController {
     /**
      * Update shelf status for a UserBook.
      *
-     * @param id ID of the UserBook
+     * @param id    ID of the UserBook
      * @param shelf new shelf status
      * @return updated UserBook
      */
@@ -182,8 +182,7 @@ public class UserBookController {
                     .body("User not found with id: " + request.getUserId());
         }
 
-        Optional<BookCatalog> existingBook =
-                bookCatalogService.findByOpenLibraryId(request.getOpenLibraryId());
+        Optional<BookCatalog> existingBook = bookCatalogService.findByOpenLibraryId(request.getOpenLibraryId());
 
         BookCatalog catalogBook;
 

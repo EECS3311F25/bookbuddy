@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/openlibrary")
-// @CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class OpenLibraryController {
 
     private final OpenLibraryService openLibraryService;

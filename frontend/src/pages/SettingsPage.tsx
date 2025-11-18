@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bell, Info, LogOut, Trash2 } from "lucide-react";
-import AppShell from "../components/layout/AppShell";
-import { UserAvatar } from "../components/common/UserAvatar";
-import { ToggleSwitch } from "../components/common/ToggleSwitch";
-import { SettingsSection } from "../components/settings/SettingsSection";
-import { SettingsItem } from "../components/settings/SettingsItem";
-import { ProfileModal } from "../components/settings/ProfileModal";
-import { AboutDialog } from "../components/settings/AboutDialog";
-import { DeleteConfirmDialog } from "../components/settings/DeleteConfirmDialog";
-import { usersApi } from "../lib/api/services/users";
+import AppShell from "@/components/layout/AppShell";
+import { UserAvatar } from "@/components/common/UserAvatar";
+import { ToggleSwitch } from "@/components/common/ToggleSwitch";
+import { SettingsSection } from "@/components/settings/SettingsSection";
+import { SettingsItem } from "@/components/settings/SettingsItem";
+import { ProfileModal } from "@/components/settings/ProfileModal";
+import { AboutDialog } from "@/components/settings/AboutDialog";
+import { DeleteConfirmDialog } from "@/components/settings/DeleteConfirmDialog";
+import { usersService } from "@/services";
 import { useAuth } from "@/contexts/useAuth";
 
 export default function SettingsPage() {
@@ -47,7 +47,7 @@ export default function SettingsPage() {
 
     try {
       // Call backend API to update user
-      const updatedUser = await usersApi.updateUser(user.id, {
+      const updatedUser = await usersService.updateUser(user.id, {
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
@@ -72,13 +72,13 @@ export default function SettingsPage() {
 
     try {
       // First verify current password by attempting login
-      await usersApi.login({
+      await usersService.login({
         usernameOrEmail: user.email,
         password: currentPassword,
       });
 
       // Update user with new password
-      await usersApi.updateUser(user.id, {
+      await usersService.updateUser(user.id, {
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
     setIsDeleting(true);
     try {
-      await usersApi.deleteUser(user.id);
+      await usersService.deleteUser(user.id);
       logout();
       navigate("/login");
     } catch (error) {

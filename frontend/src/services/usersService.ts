@@ -1,7 +1,7 @@
-import { apiClient } from "../client";
-import type { User, UserRequest, LoginRequest } from "../../../types/api";
+import { apiClient } from "@/services/api";
+import type { User, UserRequest, LoginRequest } from "@/types/api";
 
-export const usersApi = {
+export const usersService = {
   async login(request: LoginRequest): Promise<User> {
     const { data } = await apiClient.post<User>("/api/users/login", request);
     return data;

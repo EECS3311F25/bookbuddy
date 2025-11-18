@@ -1,4 +1,4 @@
-import { apiClient } from "../lib/api/client";
+import { apiClient } from "@/services/api";
 
 export interface HealthResponse {
   service: string;
@@ -7,12 +7,8 @@ export interface HealthResponse {
 }
 
 export const healthService = {
-  /**
-   * Check backend health status
-   * GET /api/health
-   */
-  check: async (): Promise<HealthResponse> => {
-    const response = await apiClient.get<HealthResponse>("/api/health");
-    return response.data;
+  async check(): Promise<HealthResponse> {
+    const { data } = await apiClient.get<HealthResponse>("/api/health");
+    return data;
   },
 };

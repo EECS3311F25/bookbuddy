@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { X } from "lucide-react";
 import { SearchInput } from "./SearchInput";
 import { SearchResults } from "./SearchResults";
-import { searchApi } from "@/lib/api/services/search";
-import type { BookSearchResult } from "@/types/api";
+import { searchService, catalogService } from "@/services";
+import { useUserLibrary } from "@/contexts/useUserLibrary";
+import type { BookSearchResult, Genre } from "@/types/api";
 
 interface SearchDialogProps {
   isOpen: boolean;
@@ -13,13 +14,41 @@ interface SearchDialogProps {
 const RESULTS_PER_PAGE = 20;
 
 export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
+  const { addBookFromSearch, isBookInLibrary } = useUserLibrary();
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState<BookSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
+  const [catalogBooks, setCatalogBooks] = useState<Set<string>>(new Set());
 
   const hasMore = books.length < totalResults;
+
+  // Load catalog books on mount to check which books exist
+  useEffect(() => {
+    const loadCatalogBooks = async () => {
+      try {
+        const allBooks = await catalogService.getAllBooks();
+        const openLibraryIds = new Set(
+          allBooks
+            .map((book) => book.openLibraryId)
+            .filter((id): id is string => !!id),
+        );
+        setCatalogBooks(openLibraryIds);
+      } catch (error) {
+        console.error("Failed to load catalog books:", error);
+      }
+    };
+
+    if (isOpen) {
+      loadCatalogBooks();
+    }
+  }, [isOpen]);
+
+  const bookExistsInCatalog = useCallback(
+    (openLibraryId: string) => catalogBooks.has(openLibraryId),
+    [catalogBooks],
+  );
 
   // Search function
   const performSearch = useCallback(
@@ -32,7 +61,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
 
       setIsLoading(true);
       try {
-        const response = await searchApi.searchBooks({
+        const response = await searchService.searchBooks({
           q: searchQuery,
           limit: RESULTS_PER_PAGE,
           page,
@@ -75,10 +104,23 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   }, [isLoading, hasMore, query, currentPage, performSearch]);
 
   // Handle add book to library
-  const handleAddBook = useCallback((book: BookSearchResult) => {
-    // TODO: Implement add to library functionality
-    console.log("Add book:", book);
-  }, []);
+  const handleAddBook = useCallback(
+    async (book: BookSearchResult, genre?: Genre) => {
+      try {
+        await addBookFromSearch({
+          title: book.title,
+          author: book.author,
+          openLibraryId: book.openLibraryId,
+          coverUrl: book.coverUrl || undefined,
+          genre,
+        });
+      } catch (error) {
+        // Error toast is already shown in context
+        console.error("Failed to add book:", error);
+      }
+    },
+    [addBookFromSearch],
+  );
 
   // Close dialog on ESC key
   useEffect(() => {
@@ -146,6 +188,8 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 hasMore={hasMore}
                 onLoadMore={handleLoadMore}
                 onAddBook={handleAddBook}
+                isBookInLibrary={isBookInLibrary}
+                bookExistsInCatalog={bookExistsInCatalog}
                 emptyMessage="No books found. Try a different search."
               />
             ) : (

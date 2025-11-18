@@ -1,14 +1,16 @@
 import { Loader2 } from "lucide-react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { BookCard } from "./BookCard";
-import type { BookSearchResult } from "@/types/api";
+import type { BookSearchResult, Genre } from "@/types/api";
 
 interface SearchResultsProps {
   books: BookSearchResult[];
   isLoading: boolean;
   hasMore: boolean;
   onLoadMore: () => void;
-  onAddBook?: (book: BookSearchResult) => void;
+  onAddBook?: (book: BookSearchResult, genre?: Genre) => void;
+  isBookInLibrary?: (openLibraryId: string) => boolean;
+  bookExistsInCatalog?: (openLibraryId: string) => boolean;
   emptyMessage?: string;
 }
 
@@ -18,6 +20,8 @@ export function SearchResults({
   hasMore,
   onLoadMore,
   onAddBook,
+  isBookInLibrary,
+  bookExistsInCatalog,
   emptyMessage = "No books found. Try a different search.",
 }: SearchResultsProps) {
   const observerTarget = useInfiniteScroll({
@@ -44,6 +48,8 @@ export function SearchResults({
           key={`${book.openLibraryId}-${index}`}
           book={book}
           onAddClick={onAddBook}
+          isInLibrary={isBookInLibrary?.(book.openLibraryId)}
+          bookExistsInCatalog={bookExistsInCatalog?.(book.openLibraryId)}
         />
       ))}
 

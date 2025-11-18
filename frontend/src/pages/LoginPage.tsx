@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BookOpen, Mail, Lock } from "lucide-react";
-import { usersApi } from "../lib/api/services/users";
-import { config } from "../config";
+import { usersService } from "@/services";
+import { config } from "@/config";
 import { useAuth } from "@/contexts/useAuth";
 
 export default function LoginPage() {
@@ -33,7 +32,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const user = await usersApi.login({
+      const user = await usersService.login({
         usernameOrEmail,
         password,
       });

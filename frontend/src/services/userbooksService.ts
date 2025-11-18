@@ -1,12 +1,12 @@
-import { apiClient } from "../client";
+import { apiClient } from "@/services/api";
 import type {
   UserBook,
   UserBookRequest,
   AddBookFromSearchRequest,
   ShelfStatus,
-} from "../../../types/api";
+} from "@/types/api";
 
-export const userbooksApi = {
+export const userbooksService = {
   async getUserBooks(userId: number): Promise<UserBook[]> {
     const { data } = await apiClient.get<UserBook[]>(
       `/api/userbooks/user/${userId}`,

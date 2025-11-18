@@ -1,7 +1,7 @@
-import { apiClient } from "../client";
-import type { BookCatalog, BookCatalogRequest } from "../../../types/api";
+import { apiClient } from "@/services/api";
+import type { BookCatalog, BookCatalogRequest } from "@/types/api";
 
-export const catalogApi = {
+export const catalogService = {
   async getAllBooks(): Promise<BookCatalog[]> {
     const { data } = await apiClient.get<BookCatalog[]>("/api/catalog");
     return data;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import type { User } from "../../types/api";
+import type { User } from "@/types/api";
 
 interface ProfileModalProps {
   isOpen: boolean;
