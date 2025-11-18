@@ -114,7 +114,7 @@ public class ReviewController {
      * @param bookId book ID
      * @return rating value
      */
-    @GetMapping("/book/{bookId}/rating")
+    @GetMapping("/book/{bookId}/average")
     public ResponseEntity<Double> getAverageRating(@PathVariable Long bookId) {
         double rating = reviewService.getAverageRating(bookId);
         return ResponseEntity.ok(rating);

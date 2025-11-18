@@ -54,15 +54,25 @@ export function BookDetailsDialog({
   const loadReviews = async () => {
     setIsLoadingReviews(true);
     try {
-      const [reviewsData, avgRating] = await Promise.all([
-        reviewsService.getReviewsByBook(userBook.book.id),
-        reviewsService.getAverageRating(userBook.book.id),
-      ]);
+      const reviewsData = await reviewsService.getReviewsByBook(userBook.book.id);
       setReviews(reviewsData);
-      setAverageRating(avgRating);
+
+      // Only fetch average if reviews exist
+      if (reviewsData.length > 0) {
+        const avgRating = await reviewsService.getAverageRating(userBook.book.id);
+        setAverageRating(avgRating);
+      } else {
+        setAverageRating(0);
+      }
     } catch (error) {
       console.error("Failed to load reviews:", error);
-      toast.error("Failed to load reviews");
+      // Don't show error toast if it's just missing reviews (404)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status?: number } };
+        if (axiosError.response?.status !== 404) {
+          toast.error("Failed to load reviews");
+        }
+      }
     } finally {
       setIsLoadingReviews(false);
     }
