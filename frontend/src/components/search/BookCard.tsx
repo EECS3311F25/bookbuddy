@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Genre, type BookSearchResult } from "@/types/api";
-import { FALLBACK_COVER } from "@/lib/constants";
+import { FALLBACK_COVER } from "@/constants";
 
 interface BookCardProps {
   book: BookSearchResult;

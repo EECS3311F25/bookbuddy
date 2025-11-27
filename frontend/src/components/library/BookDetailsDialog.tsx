@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/auth";
 import { toast } from "sonner";
 import type { UserBook, ReviewResponse } from "@/types/api";
 import { ShelfStatus } from "@/types/api";
-import { FALLBACK_COVER } from "@/lib/constants";
+import { FALLBACK_COVER } from "@/constants";
 
 interface BookDetailsDialogProps {
   isOpen: boolean;

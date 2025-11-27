@@ -1,5 +1,7 @@
 package com.bookbuddy.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 /**
@@ -15,6 +17,7 @@ public class MonthlyTrackerBook {
     private Long id;
 
     /** The monthly tracker this goal belongs to. */
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "monthly_tracker_id", nullable = false)
     private MonthlyTracker monthlyTracker;
@@ -25,6 +28,7 @@ public class MonthlyTrackerBook {
     private UserBook userBook;
 
     /** Whether the user completed this book during the month. */
+    @JsonProperty("isCompleted")
     @Column(nullable = false)
     private boolean isCompleted = false;
 

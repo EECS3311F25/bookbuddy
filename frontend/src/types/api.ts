@@ -112,3 +112,58 @@ export interface ReviewResponse {
   rating: number;
   reviewText?: string;
 }
+
+export interface MonthlyTrackerBook {
+  id: number;
+  monthlyTracker: {
+    id: number;
+  };
+  userBook: UserBook;
+  isCompleted: boolean;
+}
+
+export interface MonthlyTracker {
+  id: number;
+  user: {
+    id: number;
+    username: string;
+  };
+  month: string;
+  year: string;
+  targetBooksNum: number;
+  goalBooks: MonthlyTrackerBook[];
+}
+
+export interface TrackerProgress {
+  trackerId: number;
+  targetBooks: number;
+  totalBooks: number;
+  completedBooks: number;
+  completionPercentage: number;
+  month: string;
+  year: string;
+}
+
+export interface CreateTrackerRequest {
+  userId: number;
+  year: number;
+  month: number;
+  monthlyGoal: number;
+}
+
+export interface AddBookToTrackerRequest {
+  monthlyTrackerId: number;
+  userBookId: number;
+}
+
+export interface BulkAddBooksRequest {
+  monthlyTrackerId: number;
+  userBookIds: number[];
+}
+
+export interface BulkAddBooksResponse {
+  added: MonthlyTrackerBook[];
+  errors: string[];
+  successCount: number;
+  errorCount: number;
+}

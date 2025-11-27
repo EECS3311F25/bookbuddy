@@ -23,3 +23,7 @@ export const FALLBACK_COVER = `data:image/svg+xml,${encodeURIComponent(`
     <text x="64" y="130" font-family="serif" font-size="9" fill="#8b4513" text-anchor="middle" opacity="0.5">Available</text>
   </svg>
 `)}`;
+
+export const DEFAULT_DEBOUNCE_MS = 600;
+export const MINIMUM_SEARCH_LENGTH = 2;
+export const DEFAULT_MONTHLY_GOAL = 5;

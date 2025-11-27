@@ -1,6 +1,6 @@
 import { Trash2 } from "lucide-react";
 import type { UserBook, ShelfStatus } from "@/types/api";
-import { FALLBACK_COVER } from "@/lib/constants";
+import { FALLBACK_COVER } from "@/constants";
 
 interface LibraryBookCardProps {
   userBook: UserBook;

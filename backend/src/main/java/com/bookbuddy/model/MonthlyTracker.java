@@ -1,5 +1,6 @@
 package com.bookbuddy.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ public class MonthlyTracker {
     private int targetBooksNum;
 
     // The list of books being tracked for this month
+    @JsonManagedReference
     @OneToMany(mappedBy = "monthlyTracker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MonthlyTrackerBook> goalBooks = new ArrayList<>();
 

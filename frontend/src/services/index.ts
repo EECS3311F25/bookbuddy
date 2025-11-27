@@ -5,3 +5,4 @@ export { searchService } from "./searchService";
 export { catalogService } from "./catalogService";
 export { healthService } from "./healthService";
 export { reviewsService } from "./reviewsService";
+export * from "./monthlyTrackerService";
