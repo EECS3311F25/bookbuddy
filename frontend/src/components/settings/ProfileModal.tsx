@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
+import { PasswordInput } from "@/components/common/PasswordInput";
 import type { User } from "@/types/api";
 
 interface ProfileModalProps {
@@ -311,8 +312,7 @@ export function ProfileModal({
               <label className="text-sm font-medium text-foreground">
                 Current Password
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={passwordData.currentPassword}
                 onChange={(e) =>
                   setPasswordData({
@@ -321,7 +321,7 @@ export function ProfileModal({
                   })
                 }
                 placeholder="Enter your current password"
-                className="w-full mt-1 px-4 py-2 bg-input rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
+                className="mt-1"
               />
             </div>
 
@@ -329,8 +329,7 @@ export function ProfileModal({
               <label className="text-sm font-medium text-foreground">
                 New Password
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={passwordData.newPassword}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -342,7 +341,7 @@ export function ProfileModal({
                   }
                 }}
                 placeholder="Enter new password"
-                className="w-full mt-1 px-4 py-2 bg-input rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
+                className="mt-1"
               />
               {passwordStrength && (
                 <div className="mt-2 space-y-1">
@@ -390,8 +389,7 @@ export function ProfileModal({
               <label className="text-sm font-medium text-foreground">
                 Confirm Password
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={passwordData.confirmPassword}
                 onChange={(e) =>
                   setPasswordData({
@@ -400,7 +398,7 @@ export function ProfileModal({
                   })
                 }
                 placeholder="Confirm new password"
-                className="w-full mt-1 px-4 py-2 bg-input rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
+                className="mt-1"
               />
             </div>
 

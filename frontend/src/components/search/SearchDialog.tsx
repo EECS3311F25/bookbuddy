@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { X } from "lucide-react";
 import { SearchInput } from "./SearchInput";
 import { SearchResults } from "./SearchResults";
+import { AddCustomBookDialog } from "./AddCustomBookDialog";
 import { searchService, catalogService } from "@/services";
 import { useUserLibrary } from "@/contexts/useUserLibrary";
 import type { BookSearchResult, Genre } from "@/types/api";
@@ -21,6 +22,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [catalogBooks, setCatalogBooks] = useState<Set<string>>(new Set());
+  const [isCustomBookDialogOpen, setIsCustomBookDialogOpen] = useState(false);
 
   const hasMore = books.length < totalResults;
 
@@ -182,24 +184,52 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           {/* Results */}
           <div className="flex-1 overflow-y-auto p-4">
             {query ? (
-              <SearchResults
-                books={books}
-                isLoading={isLoading}
-                hasMore={hasMore}
-                onLoadMore={handleLoadMore}
-                onAddBook={handleAddBook}
-                isBookInLibrary={isBookInLibrary}
-                bookExistsInCatalog={bookExistsInCatalog}
-                emptyMessage="No books found. Try a different search."
-              />
+              <>
+                <SearchResults
+                  books={books}
+                  isLoading={isLoading}
+                  hasMore={hasMore}
+                  onLoadMore={handleLoadMore}
+                  onAddBook={handleAddBook}
+                  isBookInLibrary={isBookInLibrary}
+                  bookExistsInCatalog={bookExistsInCatalog}
+                  emptyMessage="No books found. Try a different search."
+                />
+
+                {/* Add Custom Book Button */}
+                {!isLoading && books.length > 0 && (
+                  <div className="mt-6 pt-4 border-t border-border">
+                    <button
+                      onClick={() => setIsCustomBookDialogOpen(true)}
+                      className="w-full px-4 py-3 bg-secondary text-foreground rounded-lg font-medium hover:bg-muted transition text-sm"
+                    >
+                      Can't find your book? Add it manually
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
-                Start typing to search for books...
+              <div className="flex flex-col items-center justify-center h-full text-center gap-4">
+                <p className="text-muted-foreground">
+                  Start typing to search for books...
+                </p>
+                <button
+                  onClick={() => setIsCustomBookDialogOpen(true)}
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition text-sm"
+                >
+                  Or add a custom book
+                </button>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Custom Book Dialog */}
+      <AddCustomBookDialog
+        isOpen={isCustomBookDialogOpen}
+        onClose={() => setIsCustomBookDialogOpen(false)}
+      />
     </>
   );
 }

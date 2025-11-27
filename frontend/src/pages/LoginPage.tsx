@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { BookOpen, Mail, Lock } from "lucide-react";
+import { BookOpen, Mail } from "lucide-react";
 import { usersService } from "@/services";
 import { config } from "@/config";
 import { useAuth } from "@/contexts/useAuth";
+import { PasswordInput } from "@/components/common/PasswordInput";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -91,17 +92,12 @@ export default function LoginPage() {
           </div>
 
           {/* Password Input */}
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-input text-foreground placeholder-muted-foreground rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary transition"
-              required
-            />
-          </div>
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
 
           {/* Error Message */}
           {error && <p className="text-destructive text-sm">{error}</p>}

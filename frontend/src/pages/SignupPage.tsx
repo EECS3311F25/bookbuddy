@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { BookOpen, Mail, Lock, User } from "lucide-react";
+import { BookOpen, Mail, User } from "lucide-react";
 import { usersService } from "@/services";
 import { config } from "@/config";
+import { useAuth } from "@/contexts/useAuth";
+import { PasswordInput } from "@/components/common/PasswordInput";
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -72,8 +75,8 @@ export default function SignupPage() {
         password: formData.password,
       });
 
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(user));
+      // Update auth context (will auto-sync to localStorage)
+      setUser(user);
 
       // Navigate to home
       navigate("/home");
@@ -167,32 +170,22 @@ export default function SignupPage() {
           </div>
 
           {/* Password Input */}
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full pl-12 pr-4 py-3 bg-input text-foreground placeholder-muted-foreground rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary transition"
-              required
-            />
-          </div>
+          <PasswordInput
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
 
           {/* Confirm Password Input */}
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full pl-12 pr-4 py-3 bg-input text-foreground placeholder-muted-foreground rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary transition"
-              required
-            />
-          </div>
+          <PasswordInput
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm Password"
+            required
+          />
 
           {/* Error Message */}
           {error && <p className="text-destructive text-sm">{error}</p>}
