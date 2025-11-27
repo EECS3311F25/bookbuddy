@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
-import { DEFAULT_DEBOUNCE_MS, MINIMUM_SEARCH_LENGTH } from "./constants";
+import { DEFAULT_DEBOUNCE_MS, MINIMUM_SEARCH_LENGTH } from "@/constants";
 
 interface SearchInputProps {
   onSearch: (query: string) => void;

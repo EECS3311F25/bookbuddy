@@ -60,6 +60,20 @@ public class MonthlyTrackerController {
                     .body("Invalid month number: " + request.getMonth());
         }
 
+        // Check for duplicate tracker
+        Optional<MonthlyTracker> existing = monthlyTrackerService.getTrackerByUserAndMonth(
+                request.getUserId(), monthEnum, String.valueOf(request.getYear()));
+        if (existing.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Tracker already exists for " + monthEnum.name() + " " + request.getYear());
+        }
+
+        // Validate minimum goal
+        if (request.getMonthlyGoal() < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Monthly goal must be at least 1");
+        }
+
         MonthlyTracker tracker = new MonthlyTracker(user, monthEnum);
         tracker.setYear(String.valueOf(request.getYear()));
         tracker.setTargetBooksNum(request.getMonthlyGoal());
@@ -154,5 +168,91 @@ public class MonthlyTrackerController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Tracker not found with id: " + id);
+    }
+
+    /**
+     * Get tracker progress statistics.
+     *
+     * @param id tracker ID
+     * @return progress information
+     */
+    @GetMapping("/{id}/progress")
+    public ResponseEntity<?> getProgress(@PathVariable Long id) {
+        try {
+            com.bookbuddy.dto.TrackerProgressDTO progress = monthlyTrackerService.calculateProgress(id);
+            return ResponseEntity.ok(progress);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Tracker not found with id: " + id);
+        }
+    }
+
+    /**
+     * Get tracker for current month for a user.
+     *
+     * @param userId user ID
+     * @return current month tracker or 404 if not found
+     */
+    @GetMapping("/user/{userId}/current")
+    public ResponseEntity<?> getCurrentMonthTracker(@PathVariable Long userId) {
+        Optional<User> userOpt = userService.getUserById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found with id: " + userId);
+        }
+
+        java.time.LocalDate now = java.time.LocalDate.now();
+        int currentMonth = now.getMonthValue();
+        String currentYear = String.valueOf(now.getYear());
+
+        Months monthEnum = Months.fromValue(currentMonth);
+        Optional<MonthlyTracker> tracker = monthlyTrackerService.getTrackerByUserAndMonth(
+                userId, monthEnum, currentYear);
+
+        if (tracker.isPresent()) {
+            return ResponseEntity.ok(tracker.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No tracker found for current month");
+    }
+
+    /**
+     * Get tracker for specific month and year.
+     *
+     * @param userId user ID
+     * @param month  month number (1-12)
+     * @param year   year
+     * @return tracker or 404 if not found
+     */
+    @GetMapping("/user/{userId}/month")
+    public ResponseEntity<?> getTrackerByMonth(
+            @PathVariable Long userId,
+            @RequestParam int month,
+            @RequestParam int year) {
+
+        Optional<User> userOpt = userService.getUserById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found with id: " + userId);
+        }
+
+        Months monthEnum;
+        try {
+            monthEnum = Months.fromValue(month);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid month number: " + month);
+        }
+
+        Optional<MonthlyTracker> tracker = monthlyTrackerService.getTrackerByUserAndMonth(
+                userId, monthEnum, String.valueOf(year));
+
+        if (tracker.isPresent()) {
+            return ResponseEntity.ok(tracker.get());
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No tracker found for " + monthEnum.name() + " " + year);
     }
 }
