@@ -97,12 +97,35 @@ spring.web.cors.allowed-origins=http://localhost:5173
 
 ---
 
-## Next Steps (Sprint 1)
+## Project Structure
 
-- [ ] Create book list component
-- [ ] Add book form
-- [ ] Implement routing (React Router)
-- [ ] Add authentication UI
-- [ ] Integrate Open Library search
-- [ ] Create reading goal tracker
-- [ ] Responsive design
+```
+frontend/src/
+├── components/
+│   ├── common/      # Shared components (BookCard, StarRating, etc.)
+│   ├── home/        # Home page components (Hero, CurrentlyReading, etc.)
+│   ├── layout/      # Layout components (Navbar, Layout)
+│   ├── library/     # Library page components (BookGrid, FilterBar, etc.)
+│   ├── search/      # Search components (SearchBar, SearchResults, etc.)
+│   ├── settings/    # Settings page components
+│   ├── tracker/     # Monthly tracker components
+│   └── ui/          # Base UI components (Button, Dialog, etc.)
+├── contexts/        # React contexts (AuthContext, etc.)
+├── hooks/           # Custom hooks (useBooks, useAuth, etc.)
+├── pages/           # Page components (Home, Library, Settings, etc.)
+├── services/        # API services (authService, bookService, etc.)
+├── types/           # TypeScript type definitions
+└── utils/           # Utility functions
+
+---
+
+## Features Implemented
+
+✅ User authentication and authorization
+✅ Personal library with shelves (Want to Read, Currently Reading, Read)
+✅ Book search via Open Library API
+✅ Custom book creation
+✅ Star ratings and reviews
+✅ Annual reading goals with progress tracking
+✅ Monthly reading tracker
+✅ Responsive design for mobile and desktop

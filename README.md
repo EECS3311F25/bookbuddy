@@ -21,6 +21,8 @@ BookBuddy prioritizes speed and simplicity. Users should be able to add a book i
 - 📚 **Personal Library**: Organize books into shelves (Want to Read, Currently Reading, Read)
 - ⭐ **Ratings & Reviews**: Rate books 1-5 stars and write personal notes
 - 🎯 **Reading Goals**: Set and track annual reading goals with visual progress
+- 📅 **Monthly Tracker**: Track reading progress month by month with completion tracking
+- 📖 **Custom Books**: Add books manually with custom titles, authors, and covers
 - 🔍 **Book Search**: Search books using [Open Library API](https://openlibrary.org/developers/api) or add manually
 - 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
 
@@ -52,12 +54,41 @@ BookBuddy prioritizes speed and simplicity. Users should be able to add a book i
 
 ```
 PROJECT/
-├── frontend/          # React + TypeScript frontend
-│   └── README.md     # See frontend/README.md for details
-├── backend/           # Spring Boot REST API
-│   └── README.md     # See backend/README.md for details
+├── frontend/              # React + TypeScript frontend
+│   ├── src/
+│   │   ├── components/   # UI components
+│   │   │   ├── common/   # Shared components
+│   │   │   ├── home/     # Home page components
+│   │   │   ├── layout/   # Layout components
+│   │   │   ├── library/  # Library page components
+│   │   │   ├── search/   # Search components
+│   │   │   ├── settings/ # Settings components
+│   │   │   ├── tracker/  # Monthly tracker components
+│   │   │   └── ui/       # Base UI components
+│   │   ├── contexts/     # React contexts
+│   │   ├── hooks/        # Custom React hooks
+│   │   ├── pages/        # Page components
+│   │   ├── services/     # API service layer
+│   │   ├── types/        # TypeScript types
+│   │   └── utils/        # Utility functions
+│   └── README.md
+│
+├── backend/               # Spring Boot REST API
+│   └── src/
+│       ├── main/java/com/bookbuddy/
+│       │   ├── config/       # Configuration classes
+│       │   ├── controller/   # REST controllers
+│       │   ├── dto/          # Data Transfer Objects
+│       │   ├── model/        # JPA entities
+│       │   ├── repository/   # Database repositories
+│       │   └── service/      # Business logic
+│       └── test/             # Unit tests
+│
 └── doc/
-    └── sprint0/      # Project documentation
+    ├── sprint0/          # Initial project documentation
+    ├── sprint1/          # Sprint 1 deliverables
+    ├── sprint2/          # Sprint 2 deliverables
+    └── sprint3/          # Sprint 3 deliverables
 ```
 
 ## Installation
@@ -111,11 +142,21 @@ See [doc/sprint0/team.md](doc/sprint0/team.md) for team member information.
 
 ## Documentation
 
+**Project Planning:**
 - [Project Summary](doc/sprint0/summary.md) - Objectives, personas, scenarios
 - [Product Backlog](doc/sprint0/PB.md) - User stories and priorities
 - [Competition Analysis](doc/sprint0/competition.md) - Comparison with GoodReads
+
+**Development:**
 - [Backend README](backend/README.md) - API documentation and setup
 - [Frontend README](frontend/README.md) - UI development guide
+- [Development Guide](DEVELOPMENT_GUIDE.md) - Git workflow and contribution guidelines
+
+**Sprints:**
+- [Sprint 0](doc/sprint0/) - Initial planning and documentation
+- [Sprint 1](doc/sprint1/) - Core features implementation
+- [Sprint 2](doc/sprint2/) - Enhanced features and improvements
+- [Sprint 3](doc/sprint3/) - Final features and polish
 
 ## License
 
