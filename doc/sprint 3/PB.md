@@ -28,8 +28,13 @@
    - Implemented Review entity + controller endpoints.
    - Added review submission + display UI.
    - Fully integrated and tested.
+   
+6. **Duplicate Book Entry Logic Fixed**
+   - Identified issue where users could add the same book multiple times to their library.
+   - Updated backend validation and repository checks to prevent duplicates.
+   - Updated frontend UI to block repeat submissions and provide user feedback.
 
-6. **Final Integration & Stabilization**
+7. **Final Integration & Stabilization**
    - DTO cleanup, Swagger updates, bug fixes.
    - Frontend and backend fully synchronized for final demo.
 
