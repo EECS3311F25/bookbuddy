@@ -1,0 +1,18 @@
+{
+  "name": "BookBuddy - Your Reading Journey",
+  "short_name": "BookBuddy",
+  "description": "Track your reading journey, discover new books, and manage your personal library.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1A1A",
+  "theme_color": "#F2C94C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
