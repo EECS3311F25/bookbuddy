@@ -2,7 +2,38 @@
 
 Spring Boot REST API for BookBuddy.
 
-> **Sprint 0 Note**: This is a basic skeleton to demonstrate MVC connectivity. Full features coming in Sprint 1+.
+This backend follows a clean **Controller → Service → Repository** architecture with DTO mapping, validation, and complete integrated features delivered across three sprints.
+
+## Features 
+
+### ✓ User & Authentication
+- Login, Signup, Logout
+- Token-based session handling
+- Validation & secure password storage
+
+### ✓ Book Management
+- Search books via OpenLibrary API
+- Add books to personal library
+- Prevent duplicate books via validation checks
+- Manual book entry (for books not found via API)
+
+### ✓ Monthly Reading Tracker
+- Track reading progress by month
+- Monthly stats and aggregation logic
+- Link books to specific months
+- Fully rewritten models (MonthlyTracker & MonthlyTrackerBook)
+
+### ✓ Reviews System
+- Add reviews for books in the library
+- Retrieve and display reviews
+- Fixed complex relationship mapping issues (UserBook ↔ Review)
+- Fully integrated with frontend
+
+### ✓ Stable API with Documentation
+- Swagger for API testing
+- Structured DTO responses
+- Clear REST endpoints
+
 
 ## Tech Stack
 
@@ -124,12 +155,4 @@ lsof -ti:8080 | xargs kill -9
 **Database locked:**
 Delete `bookbuddy.db` and restart server.
 
----
 
-## Next Steps (Sprint 1)
-
-- [ ] Implement JWT authentication
-- [ ] Add user registration/login
-- [ ] Integrate Open Library API
-- [ ] Add reading goals
-- [ ] Write unit tests
