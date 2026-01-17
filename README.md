@@ -2,7 +2,7 @@
 
 A simple personal reading tracker that helps users organize their book collection, track what they've read, and monitor reading goals.
 
-<video src="doc/Book_Buddy_App_demo_v1%20copy.mp4" width="100%" controls></video>
+<video src="./doc/Book_Buddy_App_demo_v1%20copy.mp4" width="100%" controls></video>
 
 ## Motivation
 
