@@ -2,6 +2,8 @@
 
 A simple personal reading tracker that helps users organize their book collection, track what they've read, and monitor reading goals.
 
+<video src="doc/Book_Buddy_App_demo_v1%20copy.mp4" width="100%" controls></video>
+
 ## Motivation
 
 Many readers struggle to keep track of their personal libraries, remember which books they've read, and maintain consistent reading habits. While existing solutions like Goodreads focus heavily on social features, BookBuddy is designed for readers who want a clean, personal reading tracker without the clutter.
@@ -143,16 +145,19 @@ See [doc/sprint0/team.md](doc/sprint0/team.md) for team member information.
 ## Documentation
 
 **Project Planning:**
+
 - [Project Summary](doc/sprint0/summary.md) - Objectives, personas, scenarios
 - [Product Backlog](doc/sprint0/PB.md) - User stories and priorities
 - [Competition Analysis](doc/sprint0/competition.md) - Comparison with GoodReads
 
 **Development:**
+
 - [Backend README](backend/README.md) - API documentation and setup
 - [Frontend README](frontend/README.md) - UI development guide
 - [Development Guide](DEVELOPMENT_GUIDE.md) - Git workflow and contribution guidelines
 
 **Sprints:**
+
 - [Sprint 0](doc/sprint0/) - Initial planning and documentation
 - [Sprint 1](doc/sprint1/) - Core features implementation
 - [Sprint 2](doc/sprint2/) - Enhanced features and improvements
